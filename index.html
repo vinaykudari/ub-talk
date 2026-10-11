@@ -20,14 +20,14 @@ html,body{height:100%;background:#101120;overflow:hidden;font-family:Roboto,syst
  background:repeating-radial-gradient(circle,rgba(124,222,199,0) 0 34px,rgba(124,222,199,.035) 34px 36px),radial-gradient(circle,rgba(124,222,199,.42) 0%,rgba(124,222,199,.16) 38%,rgba(124,222,199,.04) 58%,rgba(124,222,199,0) 70%)}
 .dots{position:absolute;width:160px;height:128px;background-image:radial-gradient(circle,rgba(191,191,191,.7) 2px,transparent 2.6px);background-size:32px 32px}
 .parrow{position:absolute;color:var(--mint)}
-.topbar{position:absolute;top:48px;left:80px;right:80px;display:flex;justify-content:space-between;align-items:center;font-size:18px;color:var(--grey);z-index:3}
+.topbar{position:absolute;top:48px;left:80px;right:80px;display:flex;justify-content:flex-end;align-items:center;font-size:18px;color:var(--grey);z-index:3}
 .brand{display:flex;align-items:center;gap:14px;font-family:Urbanist;font-weight:700;letter-spacing:.06em;color:var(--white);font-size:19px}
 .content{position:absolute;left:120px;right:120px;top:140px;bottom:110px;z-index:2}
 h1,h2,.u{font-family:Urbanist,sans-serif;font-weight:700;letter-spacing:-.01em;line-height:1.08}
 h1{font-size:76px}
 .kicker{font-family:Urbanist;font-weight:700;font-size:22px;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);margin-bottom:18px}
 .hl{color:var(--mint)}
-.pill{display:inline-block;border:2px solid var(--mint);border-radius:999px;padding:.06em .55em .12em;outline:1.5px solid var(--line);outline-offset:12px;color:var(--mint)}
+.pill{display:inline-block;border:2px solid var(--mint);border-radius:999px;padding:.1em .5em .14em;line-height:1;outline:1.5px solid var(--line);outline-offset:12px;color:var(--mint)}
 .lead{font-size:30px;font-weight:300;color:var(--grey);line-height:1.4}
 .src{position:absolute;left:120px;right:240px;bottom:44px;font-size:17px;color:var(--dim);z-index:3;line-height:1.35}
 .ph{border:2px dashed var(--mint);border-radius:10px;padding:0 .3em;color:var(--mint);font-style:normal}
@@ -80,23 +80,21 @@ h1{font-size:76px}
  </defs>
 </svg>
 <div id="stage">
-<div class="topbar"><div class="brand"><svg width="26" height="26"><use href="#cube"/></svg>VINAY KUDARI</div><div id="topright">UB Industry Summit · Oct 30, 2026</div></div>
+<div class="topbar"><div id="topright">UB Industry Summit · Oct 30, 2026</div></div>
 
 <!-- 1 TITLE -->
 <section class="slide" data-noright>
  <div class="glow" style="width:1100px;height:1100px;right:-430px;top:-480px"></div>
  <div class="glow" style="width:1100px;height:1100px;left:200px;bottom:-760px"></div>
  <div class="dots" style="right:150px;top:200px"></div>
- <div style="position:absolute;left:1070px;top:430px;width:44px;height:44px;background:var(--mint);transform:rotate(30deg);border-radius:4px"></div>
+ <div style="position:absolute;left:290px;top:190px;width:44px;height:44px;background:var(--mint);transform:rotate(30deg);border-radius:4px"></div>
  <svg class="parrow" style="right:110px;bottom:90px" width="84" height="84"><use href="#arrowDown"/></svg>
- <div class="content" style="top:230px">
+ <div class="content" style="top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
   <h1 style="font-size:124px;font-weight:600">Building in the</h1>
-  <div style="position:relative;display:inline-block;margin:34px 0 0 14px">
-   <h1 class="pill" style="font-size:124px;padding:0 .4em .08em">Age of Agents</h1>
+  <div style="position:relative;display:inline-block;margin-top:48px">
+   <h1 class="pill" style="font-size:124px">Age of Agents</h1>
    <svg style="position:absolute;right:-40px;bottom:-46px" width="60" height="90"><use href="#cursor"/></svg>
   </div>
-  <p class="lead" style="margin-top:56px;color:var(--white);font-weight:400;font-size:34px">Vinay Kudari · Software Engineer, Agentic AI · Google</p>
-  <p class="lead" style="margin-top:44px;font-size:24px">UB Industry Summit · University at Buffalo · Oct 30, 2026</p>
  </div>
  <aside class="notes">
   <h3>Slide 1 · Title · ~1 min</h3>
@@ -408,7 +406,7 @@ h1{font-size:76px}
  <div class="content" style="top:190px">
   <h1 style="font-size:104px;font-weight:600;line-height:1.05">Don't just look<br>for jobs.</h1>
   <div style="display:flex;align-items:center;gap:56px;margin:38px 0 0 14px">
-   <h1 class="pill" style="font-size:104px;padding:0 .45em .1em">Get curious.</h1>
+   <h1 class="pill" style="font-size:104px">Get curious.</h1>
    <svg class="parrow" style="position:static" width="76" height="76"><use href="#arrowRight"/></svg>
   </div>
   <p class="lead" style="margin-top:62px;font-size:32px">Apply AI to your own problems first.</p>
@@ -538,7 +536,7 @@ h1{font-size:76px}
  <svg class="parrow" style="right:110px;bottom:90px" width="84" height="84"><use href="#arrowDown"/></svg>
  <div class="content" style="top:200px">
   <h1 style="font-size:120px;font-weight:600">Thank you.</h1>
-  <h1 class="pill" style="font-size:96px;margin:34px 0 0 14px;padding:0 .45em .08em">Questions?</h1>
+  <h1 class="pill" style="font-size:96px;margin:34px 0 0 14px">Questions?</h1>
   <div style="margin-top:70px;display:flex;gap:56px;font-size:26px;color:var(--grey)">
    <div><span class="u hl" style="font-size:22px;letter-spacing:.12em">X</span>&nbsp;&nbsp;<span class="ph">[@your-handle]</span></div>
    <div><span class="u hl" style="font-size:22px;letter-spacing:.12em">LINKEDIN</span>&nbsp;&nbsp;<span class="ph">[linkedin.com/in/…]</span></div>
@@ -585,6 +583,7 @@ h1{font-size:76px}
  function go(n,remote){
   var old=i;i=Math.max(0,Math.min(slides.length-1,n));
   slides.forEach(function(s,k){s.classList.toggle('active',k===i)});
+  counter.style.visibility=i?'visible':'hidden';
   counter.textContent=pad(i+1)+' / '+pad(slides.length);
   prog.style.width=((i+1)/slides.length*100)+'%';
   tr.style.visibility=slides[i].hasAttribute('data-noright')?'hidden':'visible';

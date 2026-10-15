@@ -16,11 +16,40 @@ html,body{height:100%;background:#101120;overflow:hidden;font-family:Roboto,syst
 .slide.active{opacity:1;visibility:visible}
 .render .slide{transition:none}
 .notes{display:none}
+.slide.active .improvement-flow{animation:feedback-flow 8s linear infinite}
+.slide.active .architecture-flow{animation:architecture-flow 8s linear infinite}
+@keyframes architecture-flow{to{stroke-dashoffset:-20}}
+.slide.active .feedback-junction{animation:feedback-pulse 4s ease-in-out infinite}
+@keyframes feedback-flow{to{stroke-dashoffset:-26}}
+@keyframes feedback-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.render .improvement-flow,.render .architecture-flow,.render .feedback-junction{animation:none!important}
+@media(prefers-reduced-motion:reduce){.improvement-flow,.architecture-flow,.feedback-junction{animation:none!important}}
+
+.rsi-feedback-packet{display:none;offset-path:path("M1130 315v45c0 55-45 75-100 75H745c-60 0-95-30-95-85v-15");offset-distance:0%}
+.slide.active .rsi-feedback-packet{display:block;animation:rsi-feedback-arrival 10s linear infinite}
+.slide.active .rsi-harness-ring{animation:rsi-harness-response 10s ease-in-out infinite}
+@keyframes rsi-feedback-arrival{0%{offset-distance:0%;opacity:0}8%{opacity:.85}88%{opacity:.85}100%{offset-distance:100%;opacity:0}}
+@keyframes rsi-harness-response{0%,75%,100%{stroke-opacity:.12}92%{stroke-opacity:.6}}
+.render .rsi-feedback-packet{display:none!important;animation:none!important}
+.render .rsi-harness-ring{animation:none!important}
+@media(prefers-reduced-motion:reduce){.rsi-feedback-packet{display:none!important;animation:none!important}.rsi-harness-ring{animation:none!important}}
+
+.slide.active .continuity-flow{animation:continuity-travel 12s linear infinite}
+.slide.active .continuity-work{animation:continuity-response 6s ease-in-out infinite}
+@keyframes continuity-travel{to{stroke-dashoffset:-48}}
+@keyframes continuity-response{0%,100%{stroke-opacity:.4}50%{stroke-opacity:.85}}
+.render .continuity-flow,.render .continuity-work{animation:none!important}
+@media(prefers-reduced-motion:reduce){.continuity-flow,.continuity-work{animation:none!important}}
+
+.slide.active .opportunity-current{animation:opportunity-progress 14s linear infinite}
+@keyframes opportunity-progress{from{stroke-dashoffset:1072}to{stroke-dashoffset:0}}
+.render .opportunity-current{animation:none!important;display:none}
+@media(prefers-reduced-motion:reduce){.opportunity-current{animation:none!important;display:none}}
+
 .glow{position:absolute;border-radius:50%;pointer-events:none;
  background:repeating-radial-gradient(circle,rgba(124,222,199,0) 0 34px,rgba(124,222,199,.035) 34px 36px),radial-gradient(circle,rgba(124,222,199,.42) 0%,rgba(124,222,199,.16) 38%,rgba(124,222,199,.04) 58%,rgba(124,222,199,0) 70%)}
 .dots{position:absolute;width:160px;height:128px;background-image:radial-gradient(circle,rgba(191,191,191,.7) 2px,transparent 2.6px);background-size:32px 32px}
 .parrow{position:absolute;color:var(--mint)}
-.topbar{position:absolute;top:48px;left:80px;right:80px;display:flex;justify-content:flex-end;align-items:center;font-size:18px;color:var(--grey);z-index:3}
 .brand{display:flex;align-items:center;gap:14px;font-family:Urbanist;font-weight:700;letter-spacing:.06em;color:var(--white);font-size:19px}
 .content{position:absolute;left:120px;right:120px;top:140px;bottom:110px;z-index:2}
 h1,h2,.u{font-family:Urbanist,sans-serif;font-weight:700;letter-spacing:-.01em;line-height:1.08}
@@ -34,8 +63,18 @@ h1{font-size:76px}
 .card{border:2px solid var(--line);border-radius:28px;background:rgba(35,37,61,.75);padding:30px 32px}
 .card.mint{background:var(--mint);border-color:var(--mint);color:var(--bg)}
 .card.mint .muted{color:#24364A}
+.career-marker{height:38px;display:flex;align-items:center;gap:16px;margin-bottom:36px}
+.career-marker .dot{width:38px;height:38px;flex:none;border-radius:50%;background:var(--bg);border:3px solid var(--mint)}
+.career-marker .year{font:600 26px Urbanist,sans-serif;color:var(--mint);background:var(--bg);padding-right:12px}
+.career-marker.current .dot{background:var(--mint)}
+.career-marker .now{font:400 16px Roboto,sans-serif;color:var(--dim);background:var(--bg);padding:4px 0}
+.career-card{height:210px;padding:28px 24px;display:flex;flex-direction:column;justify-content:center}
+.career-card .organization{font-size:30px}
+.career-card .area{font-size:22px;line-height:1.35;margin-top:12px;color:var(--grey)}
+.career-card.mint .area{color:#24364A}
 .muted{color:var(--grey)}
 #counter{position:absolute;right:80px;bottom:40px;font-family:Urbanist;font-weight:600;font-size:20px;color:var(--dim);z-index:5;letter-spacing:.08em}
+body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
 #progress{position:absolute;left:0;bottom:0;height:5px;background:var(--mint);z-index:5;transition:width .4s ease}
 .render #progress{transition:none}
 #ctl{position:fixed;top:12px;right:12px;z-index:20;display:flex;gap:8px}
@@ -69,7 +108,7 @@ h1{font-size:76px}
 </head>
 <body>
 <div id="ctl"><button id="presentBtn" title="Presenter mode: opens the audience window (P)">Present</button><button id="scriptBtn" title="Toggle speaker script (N)">Script</button></div>
-<div id="pv"><div class="pvtop"><div class="pvinfo"><div id="pvNum">01 / 16</div><div><span id="pvTime">00:00</span> <button id="pvReset">Reset</button></div><div><button id="pvMinus" title="Smaller script (-)">A&minus;</button> <button id="pvPlus" title="Larger script (+)">A+</button></div></div><div id="pvNext"><div id="pvNextIn"></div></div></div><div class="pvhint">Share the Audience window in Zoom.</div><div id="pvScript"></div></div>
+<div id="pv"><div class="pvtop"><div class="pvinfo"><div id="pvNum">01 / 15</div><div><span id="pvTime">00:00</span> <button id="pvReset">Reset</button></div><div><button id="pvMinus" title="Smaller script (-)">A&minus;</button> <button id="pvPlus" title="Larger script (+)">A+</button></div></div><div id="pvNext"><div id="pvNextIn"></div></div></div><div class="pvhint">Share the Audience window in Zoom.</div><div id="pvScript"></div></div>
 <aside id="panel"></aside>
 <svg width="0" height="0" style="position:absolute">
  <defs>
@@ -80,7 +119,6 @@ h1{font-size:76px}
  </defs>
 </svg>
 <div id="stage">
-<div class="topbar"><div id="topright">UB Industry Summit · Oct 30, 2026</div></div>
 
 <!-- 1 TITLE -->
 <section class="slide" data-noright>
@@ -96,6 +134,7 @@ h1{font-size:76px}
    <svg style="position:absolute;right:-40px;bottom:-46px" width="60" height="90"><use href="#cursor"/></svg>
   </div>
  </div>
+ <p style="position:absolute;left:120px;bottom:48px;font-size:18px;color:var(--dim);z-index:3">Vinay Kudari</p>
  <aside class="notes">
   <h3>Slide 1 · Title · ~1 min</h3>
   <p>Hi everyone, thanks for having me, and thank you to the UB Industry Summit team for putting this together. I'm Vinay Kudari, and I'm a software engineer working on agentic AI at Google.</p>
@@ -111,59 +150,82 @@ h1{font-size:76px}
  <div class="dots" style="right:110px;top:130px"></div>
  <div class="content">
   <div class="kicker">My path</div>
-  <h1>From <span class="hl">UB</span> to <span class="hl">Google</span></h1>
+  <h1>From <span class="hl">2022</span> to <span class="hl">2026</span></h1>
   <div style="position:absolute;left:0;right:0;top:300px;height:2px;background:var(--line)"></div>
-  <div style="position:absolute;left:0;right:0;top:282px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px">
-   <div><div style="width:38px;height:38px;border-radius:50%;background:var(--bg);border:3px solid var(--mint);margin-bottom:36px"></div>
-    <div class="card" style="height:250px"><div class="u" style="font-size:32px">University at Buffalo</div><p class="muted" style="font-size:23px;margin-top:14px">MS · <span class="ph">[program, year]</span></p></div></div>
-   <div><div style="width:38px;height:38px;border-radius:50%;background:var(--bg);border:3px solid var(--mint);margin-bottom:36px"></div>
-    <div class="card" style="height:250px"><div class="u" style="font-size:32px">Reinforcement Learning</div><p class="muted" style="font-size:23px;margin-top:14px">Prof. Alina Vereshchaka's class</p></div></div>
-   <div><div style="width:38px;height:38px;border-radius:50%;background:var(--bg);border:3px solid var(--mint);margin-bottom:36px"></div>
-    <div class="card" style="height:250px;border-style:dashed;border-color:var(--mint)"><div class="u" style="font-size:32px"><span class="hl">[Company/role, year]</span></div><p class="muted" style="font-size:23px;margin-top:14px"><span class="ph">[what you built]</span></p></div></div>
-   <div><div style="width:38px;height:38px;border-radius:50%;background:var(--mint);margin-bottom:36px"></div>
-    <div class="card mint" style="height:250px"><div class="u" style="font-size:32px">Google</div><p class="muted" style="font-size:23px;margin-top:14px">Agentic AI · <span style="border:2px dashed #1B1C30;border-radius:10px;padding:0 .3em">[year]</span></p></div></div>
+  <div style="position:absolute;left:0;right:0;top:282px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px">
+   <div><div class="career-marker"><span class="dot"></span><span class="year">2022</span></div>
+    <div class="card career-card"><div class="u organization">University at Buffalo</div><p class="area">M.S. in Computer Science</p></div></div>
+   <div><div class="career-marker"><span class="dot"></span><span class="year">2022</span></div>
+    <div class="card career-card"><div class="u organization">Amazon</div><p class="area">AWS Health</p></div></div>
+   <div><div class="career-marker"><span class="dot"></span><span class="year">2023</span></div>
+    <div class="card career-card"><div class="u organization">Gap</div><p class="area">Personalization</p></div></div>
+   <div><div class="career-marker"><span class="dot"></span><span class="year">2024</span></div>
+    <div class="card career-card"><div class="u organization">Apple</div><p class="area">Apple Finance</p></div></div>
+   <div><div class="career-marker current"><span class="dot"></span><span class="year">2026</span><span class="now">Current</span></div>
+    <div class="card career-card mint"><div class="u organization">Google</div><p class="area">Google Cloud</p></div></div>
   </div>
  </div>
  <aside class="notes">
-  <h3>Slide 2 · From UB to Google · ~1.5 min</h3>
-  <p class="todo">FILL IN: MS program and year; the industry step ("[Company/role, year]") and one line on what you built there; the year you joined Google.</p>
-  <p>A quick bit on how I got here. I did my master's here at UB, <span class="fill">[program, year]</span>.</p>
-  <p>One class that really stuck with me was Prof. Alina Vereshchaka's Reinforcement Learning class. RL is the idea of an agent that takes actions in an environment, gets feedback, and gets better over time. Back then it felt like a beautiful, slightly academic idea. Today it's basically the shape of what I do every day: agents that act, get feedback, and improve. So if you're in a class right now that feels abstract, hang on to it. It may turn out to be the most practical thing you learn.</p>
-  <p>After UB, I <span class="fill">[went to Company/role, year, and one sentence on what you built there]</span>. And now I'm at Google, working on agentic AI.</p>
-  <p>The point of this slide isn't my résumé. It's that the path from this campus to working on frontier AI is short and real. A lot of what you're learning right now is exactly what the industry is scrambling for.</p>
-  <p class="srcs">Sources: Vinay's own background (fill in the placeholders).</p>
+  <h3>Slide 2 · From 2022 to 2026 · ~1.5 min</h3>
+  <p>A quick bit on how I got here. I earned my M.S. in Computer Science at the University at Buffalo in 2022.</p>
+  <p>In 2022, I worked on AWS Health at Amazon. In 2023, I worked on personalization at Gap, followed by Apple Finance at Apple in 2024. Now, in 2026, I'm working on Google Cloud at Google.</p>
+  <p>This is the path that brought me from UB to the work I'll talk about today.</p>
+  <p class="srcs">Sources: Vinay's own background.</p>
  </aside>
 </section>
 
 <!-- 3 WHAT I WORK ON -->
 <section class="slide">
- <div class="glow" style="width:1000px;height:1000px;right:-300px;top:-420px"></div>
- <svg class="parrow" style="left:120px;bottom:120px" width="56" height="56"><use href="#arrowRight"/></svg>
- <div class="content">
-  <div style="width:720px">
+ <div class="glow" style="width:1000px;height:1000px;right:-180px;top:-140px;opacity:.6"></div>
+ <div class="content" style="top:230px">
+  <div style="width:650px">
    <div class="kicker">What I work on</div>
-   <h1 style="font-size:68px">Making Google Cloud</h1>
-   <h1 class="pill" style="margin:26px 0 0 10px">agentic</h1>
-   <p class="lead" style="margin-top:52px">Building a <b style="color:var(--white);font-weight:500">cloud operator agent</b>: agents that help run real cloud infrastructure.</p>
-  </div>
-  <div class="card" style="position:absolute;right:0;top:20px;width:610px;height:600px;padding:0;overflow:hidden">
-   <svg viewBox="0 0 610 600" width="606" height="596">
-    <defs><radialGradient id="g3"><stop offset="0" stop-color="#7CDEC7" stop-opacity=".35"/><stop offset="1" stop-color="#7CDEC7" stop-opacity="0"/></radialGradient></defs>
-    <circle cx="305" cy="230" r="230" fill="url(#g3)"/>
-    <path d="M200 270a60 60 0 0 1 14-118 82 82 0 0 1 156-14 66 66 0 0 1 36 132z" fill="none" stroke="#7CDEC7" stroke-width="4" stroke-linejoin="round"/>
-    <g fill="#1B1C30" stroke="#7CDEC7" stroke-width="3">
-     <rect x="250" y="190" width="40" height="40" rx="8"/><rect x="310" y="190" width="40" height="40" rx="8"/><rect x="370" y="190" width="40" height="40" rx="8" fill="#7CDEC7"/>
-    </g>
-    <use href="#cursor" x="392" y="214" width="34" height="50"/>
-    <text x="305" y="345" text-anchor="middle" font-family="Urbanist" font-weight="700" font-size="30" fill="#F4F5F8">Cloud operator agent</text>
-    <text x="40" y="440" font-family="Roboto" font-size="17" fill="#A3A6BD" letter-spacing="2">PUBLIC CONTEXT · GOOGLE CLOUD NEXT '26</text>
-    <rect x="40" y="460" width="262" height="58" rx="29" fill="none" stroke="#7CDEC7" stroke-width="2"/>
-    <text x="171" y="496" text-anchor="middle" font-family="Roboto" font-size="20" fill="#F4F5F8">Gemini Cloud Assist</text>
-    <rect x="40" y="528" width="430" height="58" rx="29" fill="#7CDEC7"/>
-    <text x="255" y="564" text-anchor="middle" font-family="Roboto" font-weight="500" font-size="20" fill="#1B1C30">Gemini Enterprise Agent Platform</text>
-   </svg>
+   <h1 style="font-size:64px;line-height:1.12">Making Google Cloud</h1>
+   <h1 class="hl" style="font-size:100px;font-weight:600;margin-top:14px;letter-spacing:-.02em">agentic<span style="color:var(--white)">.</span></h1>
+   <svg aria-hidden="true" width="100" height="24" style="display:block;margin:36px 0 26px;color:var(--mint)"><path d="M2 12h78" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="1 10" stroke-linecap="round"/><path d="m78 5 8 7-8 7" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+   <p style="font-size:28px;font-weight:500">Building a cloud operator agent</p>
+   <p class="lead" style="font-size:26px;margin-top:10px;max-width:540px">Helping run real cloud infrastructure.</p>
   </div>
  </div>
+ <svg role="img" aria-label="Conceptual architecture: a model within an agent harness connected to Google Cloud compute, storage, networking, and databases" style="position:absolute;right:70px;top:120px;z-index:2" width="740" height="660" viewBox="0 0 740 660">
+  <defs>
+   <linearGradient id="harnessSurface" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2B3D48"/><stop offset="1" stop-color="#202337"/></linearGradient>
+   <linearGradient id="modelSurface" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#B2F1DD"/><stop offset="1" stop-color="#7CDEC7"/></linearGradient>
+   <filter id="harnessDepth" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#101120" flood-opacity=".45"/></filter>
+   <marker id="architectureArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="m2 1 3 3-3 3" fill="none" stroke="#7CDEC7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <text x="370" y="65" text-anchor="middle" font-family="Roboto,sans-serif" font-size="14" letter-spacing="2.4" fill="#A3A6BD">CONCEPTUAL ARCHITECTURE</text>
+  <text x="370" y="101" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="28" font-weight="600" fill="#F4F5F8">Cloud operator agent</text>
+  <rect x="110" y="133" width="520" height="236" rx="24" fill="url(#harnessSurface)" stroke="#7CDEC7" stroke-opacity=".65" stroke-width="1.5" filter="url(#harnessDepth)"/>
+  <path d="M137 193h466" stroke="#7CDEC7" stroke-opacity=".18"/>
+  <g transform="translate(138 155)" fill="none" stroke="#7CDEC7" stroke-width="2" stroke-linecap="round"><path d="M7 0H0v18h7M17 0h7v18h-7M10 5l-3 4 3 4M14 5l3 4-3 4"/></g>
+  <text x="176" y="173" font-family="Urbanist,sans-serif" font-size="24" font-weight="600" fill="#F4F5F8">Agent harness</text>
+  <rect x="220" y="222" width="300" height="102" rx="16" fill="url(#modelSurface)"/>
+  <g transform="translate(249 251)" fill="none" stroke="#1B1C30" stroke-width="2" stroke-linecap="round">
+   <rect x="5" y="5" width="34" height="34" rx="7"/><path d="M14 0v5M29 0v5M14 39v5M29 39v5M0 14h5M0 29h5M39 14h5M39 29h5"/>
+   <path class="feedback-junction" d="m15 22 7-7 7 7-7 7Z"/>
+  </g>
+  <text x="316" y="282" font-family="Urbanist,sans-serif" font-size="30" font-weight="600" fill="#1B1C30">Gemini</text>
+  <rect x="62" y="462" width="616" height="160" rx="20" fill="#1B1C30" fill-opacity=".75" stroke="#7CDEC7" stroke-opacity=".18"/>
+  <g class="architecture-flow" fill="none" stroke="#7CDEC7" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round">
+   <path d="M370 371v44" marker-end="url(#architectureArrow)"/>
+   <path d="M150 499v-52q0-12 12-12h426q12 0 12 12v52"/>
+   <path d="M300 435v64M450 435v64"/>
+  </g>
+  <text x="370" y="650" text-anchor="middle" font-family="Roboto,sans-serif" font-size="16" letter-spacing="1.7" fill="#A3A6BD">GOOGLE CLOUD</text>
+  <rect x="82" y="505" width="136" height="96" rx="12" fill="#252A40" stroke="#7CDEC7" stroke-opacity=".28"/>
+  <g transform="translate(150 535)" fill="none" stroke="#7CDEC7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="-15" y="-10" width="30" height="20" rx="3"/><path d="M-8 15H8M0 10v5"/></g>
+  <text x="150" y="583" text-anchor="middle" font-family="Roboto,sans-serif" font-size="18" fill="#F4F5F8">Compute</text>
+  <rect x="232" y="505" width="136" height="96" rx="12" fill="#252A40" stroke="#7CDEC7" stroke-opacity=".28"/>
+  <g transform="translate(300 535)" fill="none" stroke="#7CDEC7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m0-15 16 8v16L0 17-16 9V-7Z M-16-7 0 1 16-7M0 1v16"/></g>
+  <text x="300" y="583" text-anchor="middle" font-family="Roboto,sans-serif" font-size="18" fill="#F4F5F8">Storage</text>
+  <rect x="382" y="505" width="136" height="96" rx="12" fill="#252A40" stroke="#7CDEC7" stroke-opacity=".28"/>
+  <g transform="translate(450 535)" fill="none" stroke="#7CDEC7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cy="-11" r="5"/><circle cx="-13" cy="12" r="5"/><circle cx="13" cy="12" r="5"/><path d="M0-6v8M-13 7V2h26v5"/></g>
+  <text x="450" y="583" text-anchor="middle" font-family="Roboto,sans-serif" font-size="18" fill="#F4F5F8">Networking</text>
+  <rect x="532" y="505" width="136" height="96" rx="12" fill="#252A40" stroke="#7CDEC7" stroke-opacity=".28"/>
+  <g transform="translate(600 535)" fill="none" stroke="#7CDEC7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cy="-10" rx="15" ry="6"/><path d="M-15-10v21c0 8 30 8 30 0v-21M-15 0c0 8 30 8 30 0"/></g>
+  <text x="600" y="583" text-anchor="middle" font-family="Roboto,sans-serif" font-size="18" fill="#F4F5F8">Databases</text>
+ </svg>
  <aside class="notes">
   <h3>Slide 3 · What I work on · ~2 min</h3>
   <p class="todo">CONFIRM with your team exactly what is OK to share about the cloud operator agent. Keep it to public descriptions. Everything quoted below is from public Google Cloud blog posts.</p>
@@ -175,131 +237,250 @@ h1{font-size:76px}
  </aside>
 </section>
 
-<!-- 4 THE LOOP -->
+<!-- 4 TWO IMPROVEMENT PATHS -->
 <section class="slide">
- <div class="glow" style="width:900px;height:900px;left:-520px;bottom:-480px"></div>
- <div class="dots" style="left:120px;top:640px"></div>
+ <div class="glow" style="width:1100px;height:1100px;left:250px;top:100px;opacity:.35"></div>
  <div class="content">
-  <div style="width:560px">
-   <div class="kicker">The loop</div>
-   <h1>Agents that make agents <span class="hl">better</span></h1>
-   <p class="lead" style="margin-top:36px">Real work in, a better model out, and around again.</p>
-  </div>
+  <div class="kicker">The goal</div>
+  <h1 style="font-size:68px">A better <span class="hl">harness</span>. A better <span class="hl">Gemini</span>.</h1>
  </div>
- <svg style="position:absolute;left:760px;top:130px;z-index:2" width="780" height="684" viewBox="0 0 820 720">
-  <circle cx="410" cy="360" r="250" fill="none" stroke="#7CDEC7" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round" opacity=".9"/>
-  <circle cx="410" cy="360" r="250" fill="none" stroke="rgba(124,222,199,.25)" stroke-width="1.5"/>
-  <g fill="#7CDEC7">
-   <polygon points="-11,-13 15,0 -11,13" transform="translate(586.8,183.2) rotate(45)"/>
-   <polygon points="-11,-13 15,0 -11,13" transform="translate(586.8,536.8) rotate(135)"/>
-   <polygon points="-11,-13 15,0 -11,13" transform="translate(233.2,536.8) rotate(225)"/>
-   <polygon points="-11,-13 15,0 -11,13" transform="translate(233.2,183.2) rotate(315)"/>
+ <svg role="img" aria-label="The harness uses Gemini to operate GCP. Task feedback supports harness improvement and upstream Gemini improvement." style="position:absolute;left:120px;top:290px;z-index:2" width="1360" height="490" viewBox="0 0 1360 490">
+  <defs>
+   <linearGradient id="goalHarness" x2="1" y2="1"><stop stop-color="#2B3D48"/><stop offset="1" stop-color="#23253D"/></linearGradient>
+   <linearGradient id="goalGemini" x2="1" y2="1"><stop stop-color="#B2F1DD"/><stop offset="1" stop-color="#7CDEC7"/></linearGradient>
+   <marker id="goalArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="m3 2 3 3-3 3" fill="none" stroke="#7CDEC7" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <rect x="100" y="80" width="520" height="300" rx="28" fill="url(#goalHarness)" stroke="#7CDEC7" stroke-width="2"/>
+  <g transform="translate(136 111)" stroke="#7CDEC7" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 0H0v30h9M31 0h9v30h-9M16 8l-7 7 7 7M24 8l7 7-7 7"/></g>
+  <text x="193" y="140" font-family="Urbanist,sans-serif" font-weight="600" font-size="38" fill="#F4F5F8">Harness</text>
+  <path d="M136 166h448" stroke="#7CDEC7" stroke-opacity=".18"/>
+  <rect x="220" y="235" width="280" height="90" rx="18" fill="url(#goalGemini)"/>
+  <g transform="translate(250 257)" fill="none" stroke="#1B1C30" stroke-width="2" stroke-linecap="round">
+   <rect x="5" y="5" width="34" height="34" rx="7"/><path d="M14 0v5M29 0v5M14 39v5M29 39v5M0 14h5M0 29h5M39 14h5M39 29h5M22 14l8 8-8 8-8-8Z"/>
   </g>
-  <circle cx="410" cy="360" r="120" fill="rgba(124,222,199,.08)" stroke="rgba(124,222,199,.35)" stroke-width="1.5"/>
-  <text x="410" y="362" text-anchor="middle" font-family="Urbanist" font-weight="800" font-size="62" fill="#7CDEC7">RSI</text>
-  <text x="410" y="398" text-anchor="middle" font-family="Roboto" font-size="17" fill="#BFBFBF">Recursive</text>
-  <text x="410" y="420" text-anchor="middle" font-family="Roboto" font-size="17" fill="#BFBFBF">self-improvement</text>
-  <g font-family="Urbanist" font-weight="700" font-size="27" text-anchor="middle">
-   <rect x="270" y="60" width="280" height="100" rx="24" fill="#1B1C30" stroke="#7CDEC7" stroke-width="2.5"/>
-   <text x="410" y="102" fill="#F4F5F8">Agent harness</text>
-   <text x="410" y="134" font-family="Roboto" font-weight="400" font-size="19" fill="#BFBFBF">runs real tasks</text>
-   <rect x="540" y="310" width="260" height="100" rx="24" fill="#1B1C30" stroke="#7CDEC7" stroke-width="2.5"/>
-   <text x="670" y="352" fill="#F4F5F8">Trajectories</text>
-   <text x="670" y="384" font-family="Roboto" font-weight="400" font-size="19" fill="#BFBFBF">and data</text>
-   <rect x="250" y="552" width="320" height="118" rx="24" fill="#1B1C30" stroke="#7CDEC7" stroke-width="2.5"/>
-   <text x="410" y="594" fill="#F4F5F8">Improve Gemini</text>
-   <text x="410" y="624" font-family="Roboto" font-weight="400" font-size="19" fill="#BFBFBF">upstreamed to</text>
-   <text x="410" y="650" font-family="Roboto" font-weight="400" font-size="19" fill="#BFBFBF">Google DeepMind</text>
-   <rect x="20" y="310" width="260" height="100" rx="24" fill="#7CDEC7"/>
-   <text x="150" y="352" fill="#1B1C30">Better agent</text>
-   <text x="150" y="384" font-family="Roboto" font-weight="500" font-size="19" fill="#24364A">loops back</text>
+  <text x="315" y="292" font-family="Urbanist,sans-serif" font-size="36" font-weight="600" fill="#1B1C30">Gemini</text>
+  <rect x="900" y="80" width="280" height="100" rx="20" fill="#23253D" stroke="#7CDEC7" stroke-opacity=".35"/>
+  <g transform="translate(935 110)" fill="none" stroke="#7CDEC7" stroke-width="2" stroke-linecap="round"><path d="m0 5 4 4 7-8M18 5h21M0 24l4 4 7-8M18 24h21"/></g>
+  <text x="1047" y="143" font-family="Urbanist,sans-serif" font-size="36" font-weight="600" fill="#F4F5F8">GCP</text>
+  <rect x="900" y="310" width="280" height="100" rx="20" fill="#293B45" stroke="#7CDEC7" stroke-opacity=".6"/>
+  <text x="1040" y="372" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="36" font-weight="600" fill="#F4F5F8">Feedback</text>
+  <g fill="none" stroke="#7CDEC7" stroke-width="2" stroke-opacity=".65" stroke-linecap="round" marker-end="url(#goalArrow)">
+   <path d="M625 175h98q30 0 30-30v-5q0-10 10-10h128"/>
+   <path d="M1040 185v116"/>
+  </g>
+  <g class="improvement-flow" fill="none" stroke="#7CDEC7" stroke-width="3" stroke-dasharray="1 12" stroke-linecap="round" marker-end="url(#goalArrow)">
+   <path d="M894 350H630"/>
+   <path d="M1040 415v35q0 20-20 20H380q-20 0-20-20V334" stroke-opacity=".55"/>
+  </g>
+  <circle class="feedback-junction" cx="1040" cy="244" r="5" fill="#7CDEC7"/>
+  <text x="761" y="326" text-anchor="middle" font-family="Roboto,sans-serif" font-size="21" fill="#7CDEC7">Improve harness</text>
+  <text x="710" y="447" text-anchor="middle" font-family="Roboto,sans-serif" font-size="21" fill="#A3A6BD">Improve model</text>
+ </svg>
+ <aside class="notes">
+  <h3>Slide 4 · Two improvement paths · ~1 min</h3>
+  <p>The harness uses Gemini to operate across GCP and execute real tasks. Gemini is the model within the agent system, not an unrelated endpoint. The solid connectors show the operational path from the harness to tasks and feedback.</p>
+  <p>The dotted return path from feedback to the harness is our primary project: self-improving the harness itself, so the agent operates better. The second dotted path returns to Gemini inside that harness: the same task data and feedback can be upstreamed to inform model improvement. Improving Gemini is the second goal; model updates are a separate path from the harness improvement loop.</p>
+  <p>Next, I'll explain the harness self-improvement loop in more detail.</p>
+  <p class="srcs">Sources: Vinay's description of the project and its goals.</p>
+ </aside>
+</section>
+
+<!-- 5 THE LOOP -->
+<section class="slide">
+ <div class="glow" style="width:1200px;height:1200px;left:260px;top:-40px;opacity:.3"></div>
+ <div class="content">
+  <h1 style="font-size:82px">Recursive <span class="hl">self-improvement</span></h1>
+  <p class="lead" style="font-size:30px;margin-top:22px">Real use drives a better harness</p>
+ </div>
+ <svg role="img" aria-label="A user operates GCP through a harness powered by Gemini. Feedback from capability gaps returns directly to improve the same harness in a continuous loop." style="position:absolute;left:120px;top:300px;z-index:2" width="1360" height="500" viewBox="0 0 1360 500">
+  <defs>
+   <linearGradient id="rsiSurface" x2="1" y2="1"><stop stop-color="#2B3D48"/><stop offset="1" stop-color="#23253D"/></linearGradient>
+   <linearGradient id="rsiCore" x2="1" y2="1"><stop stop-color="#B2F1DD"/><stop offset="1" stop-color="#7CDEC7"/></linearGradient>
+   <linearGradient id="rsiUserSurface" x2="0" y2="1"><stop stop-color="#7CDEC7" stop-opacity=".18"/><stop offset="1" stop-color="#7CDEC7" stop-opacity=".04"/></linearGradient>
+   <marker id="rsiArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="m3 2 3 3-3 3" fill="none" stroke="#7CDEC7" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <path d="M835 195h135M1130 315v45c0 55-45 75-100 75H745c-60 0-95-30-95-85v-15" fill="none" stroke="#7CDEC7" stroke-opacity=".12" stroke-width="1.5"/>
+  <g class="improvement-flow" fill="none" stroke="#7CDEC7" stroke-width="2.5" stroke-dasharray="1 12" stroke-linecap="round" marker-end="url(#rsiArrow)">
+   <path d="M350 195h110M835 195h135"/>
+   <path d="M1130 315v45c0 55-45 75-100 75H745c-60 0-95-30-95-85v-15"/>
+  </g>
+  <g transform="translate(135 110)">
+   <ellipse cx="90" cy="186" rx="107" ry="16" fill="#7CDEC7" fill-opacity=".045"/>
+   <circle cx="59" cy="36" r="25" fill="url(#rsiUserSurface)" stroke="#7CDEC7" stroke-width="2.5"/>
+   <path d="M28 20c5-16 17-24 33-24 16 0 26 9 28 23" fill="none" stroke="#A3A6BD" stroke-opacity=".6" stroke-width="2.5" stroke-linecap="round"/>
+   <path d="M17 165v-39c0-29 14-48 41-48 22 0 34 10 46 28l18 25" fill="url(#rsiUserSurface)" stroke="#7CDEC7" stroke-width="2.5" stroke-linecap="round"/>
+   <path d="m66 111 22 31h44" fill="none" stroke="#B2F1DD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+   <path d="M111 91h67l-14 57H98Z" fill="#23253D" stroke="#7CDEC7" stroke-width="2.5" stroke-linejoin="round"/>
+   <path d="M13 165h177" stroke="#7CDEC7" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round"/>
+   <path d="m134 111-9 9 5 9M149 111l5 9-9 9" fill="none" stroke="#7CDEC7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="225" y="337" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="600" font-size="30" fill="#F4F5F8">User</text>
+  <rect x="470" y="80" width="360" height="245" rx="28" fill="url(#rsiSurface)" stroke="#7CDEC7" stroke-opacity=".6" stroke-width="1.5"/>
+  <rect class="rsi-harness-ring" x="464" y="74" width="372" height="257" rx="33" fill="none" stroke="#7CDEC7" stroke-opacity=".12" stroke-width="1.5"/>
+  <text x="650" y="134" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="33" font-weight="600" fill="#F4F5F8">Agent harness</text>
+  <path d="M499 156h302" stroke="#7CDEC7" stroke-opacity=".18"/>
+  <rect x="535" y="199" width="230" height="88" rx="16" fill="url(#rsiCore)"/>
+  <g transform="translate(556 223)" stroke="#1B1C30" stroke-width="1.8" fill="none"><rect x="4" y="4" width="32" height="32" rx="6"/><path d="M14 0v4M26 0v4M14 36v4M26 36v4M0 14h4M0 26h4M36 14h4M36 26h4"/></g>
+  <text x="615" y="254" font-family="Urbanist,sans-serif" font-size="30" font-weight="600" fill="#1B1C30">Gemini</text>
+  <rect x="980" y="80" width="300" height="230" rx="28" fill="#23253D" stroke="#7CDEC7" stroke-opacity=".3" stroke-width="1.5"/>
+  <text x="1130" y="134" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="33" font-weight="600" fill="#F4F5F8">GCP</text>
+  <path d="M1009 156h242" stroke="#7CDEC7" stroke-opacity=".18"/>
+  <g fill="#252A40" stroke="#7CDEC7" stroke-opacity=".28"><rect x="1002" y="192" width="78" height="82" rx="12"/><rect x="1091" y="192" width="78" height="82" rx="12"/><rect x="1180" y="192" width="78" height="82" rx="12"/></g>
+  <g fill="none" stroke="#7CDEC7" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round">
+   <rect x="1024" y="219" width="34" height="21" rx="3"/><path d="M1033 246h16M1041 240v6"/>
+   <ellipse cx="1130" cy="220" rx="16" ry="6"/><path d="M1114 220v23c0 8 32 8 32 0v-23M1114 231c0 8 32 8 32 0"/>
+   <circle cx="1219" cy="217" r="5"/><circle cx="1205" cy="244" r="5"/><circle cx="1233" cy="244" r="5"/><path d="M1219 222v10M1205 239v-7h28v7"/>
+  </g>
+  <text x="920" y="410" text-anchor="middle" font-family="Roboto,sans-serif" font-size="24" fill="#BFBFBF">Feedback from capability gaps</text>
+  <text x="596" y="380" text-anchor="end" font-family="Roboto,sans-serif" font-size="22" fill="#7CDEC7">Improve harness</text>
+  <circle class="rsi-feedback-packet" r="4" fill="#C9FFF1"/>
+ </svg>
+ <aside class="notes">
+  <h3>Slide 5 · Real-use-driven harness improvement · ~2 min</h3>
+  <p>GCP has many moving parts. Users ask the cloud operator agent to manage their own infrastructure, trying a diverse range of requests. The harness uses Gemini to attempt those tasks across GCP. Some difficult or unsuccessful cases reveal things that the current harness cannot yet do well.</p>
+  <p>Those capability gaps provide useful feedback for improving the harness. The goal is better handling of future user requests, and those future requests continue to expose new opportunities to improve. This is a conceptual real-use-driven loop; the illustration does not prescribe how feedback is collected, retained, evaluated, or turned into deployed changes.</p>
+  <p>The primary improvement target here is the harness itself. Task data can also be upstreamed to improve Gemini, as explained on the previous slide; that separate path is omitted here to focus on the harness loop.</p>
+  <p>Background research: Darwin Gödel Machine and SICA illustrate agent implementations improving from execution feedback. Their benchmark/archive mechanisms are not presented as our implementation. This slide follows Vinay's account of real user tasks and capability gaps, rather than their candidate-search process.</p>
+  <p class="srcs">Project narrative: Vinay's description. Background inspiration: <a href="https://arxiv.org/html/2505.22954v1" target="_blank">Darwin Gödel Machine (Zhang et al., 2025), Figure 1 and Section 3</a> · <a href="https://arxiv.org/html/2504.15228v1" target="_blank">A Self-Improving Coding Agent (Robeyns et al., 2025), Figure 1 and Section 3</a>. Original conceptual illustration.</p>
+ </aside>
+</section>
+
+<!-- 6 A REAL CHALLENGE -->
+<section class="slide">
+ <div class="glow" style="width:1100px;height:1100px;right:-220px;top:-100px;opacity:.35"></div>
+ <div class="content" style="top:110px">
+  <div class="kicker">A real challenge</div>
+  <h1 style="font-size:72px;line-height:1.12">Fix one thing.<br><span class="hl">Keep everything else working.</span></h1>
+  <p class="lead" style="font-size:28px;margin-top:24px">Find recurring failures. Improve the harness without breaking other tasks.</p>
+ </div>
+ <svg role="img" aria-label="Conceptual goal: one harness change should address a recurring weakness while preserving behavior on other tasks. No measured outcomes are shown." style="position:absolute;left:120px;top:430px;z-index:2" width="1360" height="350" viewBox="0 0 1360 350">
+  <defs>
+   <linearGradient id="changeSurface" x2="1" y2="1"><stop stop-color="#2B3D48"/><stop offset="1" stop-color="#23253D"/></linearGradient>
+   <marker id="changeArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="m3 2 3 3-3 3" fill="none" stroke="#7CDEC7" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <g class="architecture-flow" fill="none" stroke="#7CDEC7" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round" marker-end="url(#changeArrow)">
+   <path d="M385 175h95"/>
+   <path d="M490 175h75q35 0 35-35V80q0-35 35-35h75" stroke-opacity=".45"/>
+   <path d="M490 175h220"/>
+   <path d="M490 175h75q35 0 35 35v60q0 35 35 35h75" stroke-opacity=".45"/>
+   <path d="M1005 45h65M1005 175h65M1005 305h65"/>
+  </g>
+  <circle cx="490" cy="175" r="5" fill="#7CDEC7"/>
+  <rect x="80" y="95" width="300" height="160" rx="24" fill="url(#changeSurface)" stroke="#7CDEC7" stroke-opacity=".65" stroke-width="1.5"/>
+  <g transform="translate(205 124)" fill="none" stroke="#7CDEC7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 0H0v42h10M40 0h10v42H40M18 14h14M25 7v14M18 30h14"/></g>
+  <text x="230" y="217" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="30" font-weight="600" fill="#F4F5F8">Harness change</text>
+  <rect x="720" y="0" width="280" height="90" rx="18" fill="#23253D" stroke="#7CDEC7" stroke-opacity=".25"/>
+  <rect x="720" y="130" width="280" height="90" rx="18" fill="#7CDEC7"/>
+  <rect x="720" y="260" width="280" height="90" rx="18" fill="#23253D" stroke="#7CDEC7" stroke-opacity=".25"/>
+  <g font-family="Urbanist,sans-serif" font-size="28" font-weight="600" text-anchor="middle">
+   <text x="860" y="55" fill="#BFBFBF">Other tasks</text>
+   <text x="860" y="184" fill="#1B1C30">Recurring weakness</text>
+   <text x="860" y="315" fill="#BFBFBF">Other tasks</text>
+  </g>
+  <g font-family="Roboto,sans-serif" font-size="26" fill="#BFBFBF">
+   <text x="1090" y="54">Keep working</text>
+   <text x="1090" y="184" fill="#7CDEC7">Improve</text>
+   <text x="1090" y="314">Keep working</text>
   </g>
  </svg>
  <aside class="notes">
-  <h3>Slide 4 · The loop · ~2 min</h3>
-  <p class="todo">CONFIRM this high-level framing is OK to share publicly.</p>
-  <p>Here's the part I find most exciting, and I'll keep it high-level. Think of it as a loop.</p>
-  <p>At the top, an agent harness runs real tasks: real work, in real environments. Every run produces trajectories, meaning the steps the agent took, what worked and what didn't. That's data. That data helps improve Gemini; the learnings get upstreamed to Google DeepMind. A better model makes a better agent. And the better agent goes back into the harness and takes on harder tasks. Then the loop repeats.</p>
-  <p>People call this recursive self-improvement, or RSI. I want to be careful here: this isn't a magic machine that improves itself overnight. Every arrow in this loop has humans in it. People design the tasks, build the evaluations, decide what "good" looks like, and catch the failures.</p>
-  <p>But the shape matters. It's the same shape as that RL class: act, get feedback, improve. Except now the "agent" is a production system and the "environment" is real work. And how fast each turn of the loop goes is a big part of why this era feels so different.</p>
-  <p class="srcs">Sources: Vinay's own high-level description (no external facts).</p>
+  <h3>Slide 6 · Fix one thing, keep everything else working · ~1.5 min</h3>
+  <p>A practical challenge is finding recurring failure or loss patterns across a huge and varied set of real user tasks. I'm using those words to describe weaknesses in task behavior, not a specific model-training loss function.</p>
+  <p>Once we identify a weakness, improving the harness must also account for its other behavior. A change aimed at one capability can conflict with another task or regress something that already works. The illustration shows the goal: address the recurring weakness while preserving behavior across other tasks, rather than claiming those outcomes have already been measured.</p>
+  <p>Scale makes both parts harder: spotting useful patterns in a large volume of feedback, and understanding the effect of a change across diverse GCP usage. This is a conceptual description of the challenge, not a particular evaluation algorithm, customer-data pipeline, or deployment process.</p>
+  <p class="srcs">Source: Vinay's description of the project's challenges.</p>
  </aside>
 </section>
 
-<!-- 5 A REAL CHALLENGE -->
+<!-- 7 TECHNOLOGY AND JOBS -->
 <section class="slide">
- <div class="glow" style="width:1000px;height:1000px;right:-520px;top:-300px"></div>
- <div class="dots" style="right:140px;top:150px"></div>
- <svg class="parrow" style="right:150px;bottom:130px" width="70" height="70"><use href="#arrowRight"/></svg>
- <div class="content" style="top:220px">
-  <div class="kicker">A real challenge</div>
-  <h1 style="font-size:66px;max-width:1150px;margin-top:30px"><span style="border:3px dashed var(--mint);border-radius:40px;padding:14px 36px;display:inline-block;color:var(--mint);outline:1.5px solid var(--line);outline-offset:12px">[e.g., evaluating an agent on long, real cloud tasks]</span></h1>
-  <p class="lead" style="margin-top:64px"><span class="ph">[One line: why it's hard. Non-confidential.]</span></p>
- </div>
- <aside class="notes">
-  <h3>Slide 5 · A real challenge · ~1.5 min</h3>
-  <p class="todo">FILL IN one real, non-confidential challenge for the headline (placeholder: "evaluating an agent on long, real cloud tasks") and a one-line "why it's hard."</p>
-  <p>Let me make this concrete with one real challenge: <span class="fill">[your challenge, e.g., evaluating an agent on long, real cloud tasks]</span>.</p>
-  <p>Here's why a challenge like that is hard, in general terms. Short tasks are easy to grade: did the answer match or not? Long tasks are different. An agent might take dozens of steps, the environment changes underneath it, and there may be several correct ways to finish. One mistake early on can quietly ruin everything after it.</p>
-  <p>Public research backs this up. METR found that models had almost a 100% success rate on tasks that take a human under four minutes, but succeeded less than 10% of the time on tasks that take more than about four hours. That was as of March 2025, and it's improving fast, but long, messy, real work is still the frontier.</p>
-  <p><span class="fill">[One or two sentences on how you think about this problem, with no internal details.]</span></p>
-  <p>I mention this because problems like this are wide open right now. Nobody has the final answer. That's an opportunity.</p>
-  <p class="srcs">Sources: <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" target="_blank">METR, Measuring AI ability to complete long tasks (Mar 2025)</a></p>
- </aside>
-</section>
-
-<!-- 6 THIS WILL KILL US -->
-<section class="slide">
- <div class="glow" style="width:800px;height:800px;left:-440px;top:-420px"></div>
- <div class="content">
-  <div class="kicker">Every new technology</div>
-  <h1>“This will <span class="pill">kill us.</span>”</h1>
-  <div style="position:absolute;left:0;right:0;top:250px;display:grid;grid-template-columns:repeat(4,1fr);gap:26px">
-   <div class="card" style="height:360px;display:flex;flex-direction:column"><div class="u hl" style="font-size:54px">1888</div><div class="u" style="font-size:30px;margin-top:6px">Electricity</div><p style="font-size:27px;font-style:italic;font-weight:300;margin-top:22px;line-height:1.3">“undertaker's wire”</p><p class="muted" style="font-size:18px;margin-top:auto">Harold P. Brown on AC, <i>NY Evening Post</i></p></div>
-   <div class="card" style="height:360px;display:flex;flex-direction:column"><div class="u hl" style="font-size:54px">1986</div><div class="u" style="font-size:30px;margin-top:6px">Calculators</div><p style="font-size:24px;font-style:italic;font-weight:300;margin-top:22px;line-height:1.3">“The Button's Nothin' 'Til the Brain's Trained”</p><p class="muted" style="font-size:18px;margin-top:auto">Math teachers' picket sign</p></div>
-   <div class="card" style="height:360px;display:flex;flex-direction:column"><div class="u hl" style="font-size:54px">1995</div><div class="u" style="font-size:30px;margin-top:6px">Internet</div><p style="font-size:27px;font-style:italic;font-weight:300;margin-top:22px;line-height:1.3">“The Internet? Bah!”</p><p class="muted" style="font-size:18px;margin-top:auto">Clifford Stoll, <i>Newsweek</i></p></div>
-   <div class="card mint" style="height:360px;display:flex;flex-direction:column"><div class="u" style="font-size:54px">2017</div><div class="u" style="font-size:30px;margin-top:6px">Phones</div><p style="font-size:24px;font-style:italic;font-weight:400;margin-top:22px;line-height:1.3">“Have Smartphones Destroyed a Generation?”</p><p class="muted" style="font-size:18px;margin-top:auto"><i>The Atlantic</i></p></div>
+ <div class="glow" style="width:800px;height:800px;left:-440px;top:-420px;opacity:.5"></div>
+ <div class="content" style="top:120px">
+  <div class="kicker">New technology, familiar questions</div>
+  <h1>Will AI Take Our <span class="pill">Jobs?</span></h1>
+  <div style="position:absolute;left:0;right:0;top:205px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px">
+   <div>
+    <div class="u hl" style="font-size:30px;margin-bottom:18px">Electricity <span style="font-size:22px;font-weight:500;color:var(--dim)">· 1930</span></div>
+    <img src="assets/clippings/electricity-1930-jobs.png" alt="Original Otago Daily Times letter warning that electric power will put thousands out of employment" style="display:block;width:100%;height:165px;object-fit:contain;background:#fff;border-radius:4px">
+    <blockquote style="font-family:Urbanist,sans-serif;font-size:30px;line-height:1.3;margin-top:24px;min-height:132px">“power that will put thousands out of employment”</blockquote>
+    <p style="font-size:20px;color:var(--grey);line-height:1.35;margin-top:18px">Letter to the editor<br><i>Otago Daily Times</i></p>
+    <p style="font-size:17px;color:var(--dim);margin-top:8px">May 28, 1930 · original newspaper scan</p>
+   </div>
+   <div>
+    <div class="u hl" style="font-size:30px;margin-bottom:18px">Calculators <span style="font-size:22px;font-weight:500;color:var(--dim)">· 1986</span></div>
+    <div style="height:165px;display:flex;align-items:center;background:#121212;border-radius:4px;padding:10px">
+     <img src="assets/clippings/calculators-1986-header.jpg" alt="Screenshot of The Washington Post's original calculator-protest article headline" style="display:block;width:100%;height:auto">
+    </div>
+    <blockquote style="font-family:Urbanist,sans-serif;font-size:30px;line-height:1.3;margin-top:24px;min-height:132px">“The Button's Nothin' Til the Brain's Trained”</blockquote>
+    <p style="font-size:20px;color:var(--grey);line-height:1.35;margin-top:18px">Teachers' protest sign<br><i>The Washington Post</i></p>
+    <p style="font-size:17px;color:var(--dim);margin-top:8px">April 1986 · archive headline</p>
+   </div>
+   <div>
+    <div class="u hl" style="font-size:30px;margin-bottom:18px">Internet <span style="font-size:22px;font-weight:500;color:var(--dim)">· 1995</span></div>
+    <div style="height:165px;display:flex;align-items:center;background:#fff;border-radius:4px;padding:12px">
+     <img src="assets/clippings/internet-1995-header.jpg" alt="Authentic Deseret News archive headline for its 1995 Reuter News Service article" style="display:block;width:100%;height:auto">
+    </div>
+    <blockquote style="font-family:Urbanist,sans-serif;font-size:30px;line-height:1.3;margin-top:24px;min-height:132px">“it would also probably destroy jobs”</blockquote>
+    <p style="font-size:20px;color:var(--grey);line-height:1.35;margin-top:18px">Reuter News Service<br><i>Deseret News</i></p>
+    <p style="font-size:17px;color:var(--dim);margin-top:8px">Sept 14, 1995 · archive headline</p>
+   </div>
   </div>
  </div>
- <p class="src">Sources: Zócalo Public Square (Brown, 1888) · LA Times, May 17, 1986 · Newsweek, Feb 26, 1995 · The Atlantic, Sept 2017</p>
  <aside class="notes">
-  <h3>Slide 6 · "This will kill us" · ~2 min</h3>
-  <p>Whenever a big technology shows up, someone says: this will kill us. Sometimes literally.</p>
-  <p>In 1888, during the war of the currents, Harold P. Brown wrote to the New York Evening Post that among electric lighting men, alternating current was "appropriately called 'undertaker's wire.'" Today it's in the walls of the room you're sitting in.</p>
-  <p>In 1986, math teachers picketed outside the national math teachers' convention over calculators in elementary classrooms. One sign read: "The Button's Nothin' 'Til the Brain's Trained." And honestly? That sign was half right. I'll come back to it.</p>
-  <p>In 1995, Clifford Stoll wrote in Newsweek, under the print headline "The Internet? Bah!", that "no online database will replace your daily newspaper."</p>
-  <p>And in 2017, The Atlantic ran a cover story asking, "Have Smartphones Destroyed a Generation?" To be fair, the debate about phones and mental health is still very much live. I'm presenting it as a fear from its time, not as a debunked one.</p>
-  <p>The pattern: each time, the fear had a kernel of truth, the technology spread anyway, and the people who learned to use it well came out ahead. So when you hear "AI will kill us," the honest question is: is this time different?</p>
-  <p class="srcs">Sources: <a href="https://www.zocalopublicsquare.org/the-dirty-industrial-rivalry-that-determined-whether-americas-electricity-would-be-ac-or-dc/" target="_blank">Zócalo Public Square (Brown's 1888 letter)</a> · <a href="https://www.latimes.com/archives/la-xpm-1986-05-17-mn-5638-story.html" target="_blank">LA Times, May 17, 1986</a> · <a href="https://www.washingtonpost.com/archive/local/1986/04/04/math-teachers-stage-a-calculated-protest/c003ddaf-b86f-4f2b-92ca-08533f3a5896/" target="_blank">Washington Post, Apr 1986</a> · <a href="https://www.newsweek.com/clifford-stoll-why-web-wont-be-nirvana-185306" target="_blank">Newsweek, Stoll 1995</a> · <a href="https://www.theatlantic.com/magazine/archive/2017/09/has-the-smartphone-destroyed-a-generation/534198/" target="_blank">The Atlantic, Twenge 2017</a></p>
+  <h3>Slide 7 · Will AI Take Our Jobs? · ~2 min</h3>
+  <p>When you're getting ready to enter the workforce, “Will AI take our jobs?” is a reasonable question. And that worry has a history. In 1930, a newspaper letter warned that electric power would put thousands out of employment. In the 1980s, teachers protesting calculators worried about students losing basic skills. In 1995, reporting on the internet captured fears that it would probably destroy jobs. Those concerns weren't all the same, and we shouldn't dismiss them as all wrong.</p>
+  <p>I see technological change as a kind of evolution. The transition can be disruptive, uncertain, even chaotic, and people have to adapt as things change. But that doesn't tell us how this particular transition will turn out. AI reaches into a broad range of cognitive tasks, and its capabilities are changing quickly. So let's look at what makes this wave different.</p>
+  <p>Electricity: G. Lawrence's letter to the editor, “The Unemployment Question,” Otago Daily Times, May 28, 1930, page 6. The original scan verifies the excerpt. The sentence concerns the Arapuni dam and electric power works supplying Auckland and surrounding areas. This is a contemporary reader's forecast about electrification and employment, not a measured job-loss outcome. The slide uses the newspaper publication date, not the letter's May 24 dateline.</p>
+  <p>Calculators: the sign is reported in Anndee Hochman's contemporary Washington Post article. It concerns skills and education, rather than predicting that calculators will eliminate jobs. The authentic publisher archive headline is shown; the sign is typeset below because its source paragraph was unavailable in the browser screenshot. The archive displays April 3, 1986, while the URL is dated April 4; the slide uses April 1986.</p>
+  <p>Internet: the excerpt is from Reuter News Service reporting published by Deseret News on September 14, 1995. It summarizes a debate at an International Institute of Communications conference in Osaka. It is article narrative about the delegates' fears, not a direct quotation from one named expert or a research finding. Preserve “probably.” The image is the authentic publisher archive headline, with contrast increased for legibility; the short verified article excerpt is typeset below. These archive headers are screenshots of publisher websites, not scans of the original print editions.</p>
+  <p class="srcs">Sources: <a href="https://paperspast.natlib.govt.nz/newspapers/ODT19300528.2.28.10" target="_blank">Otago Daily Times, May 28, 1930 · National Library of New Zealand</a> · <a href="https://www.washingtonpost.com/archive/local/1986/04/04/math-teachers-stage-a-calculated-protest/c003ddaf-b86f-4f2b-92ca-08533f3a5896/" target="_blank">The Washington Post, April 1986</a> · <a href="https://www.deseret.com/1995/9/14/19192893/information-superhighway-the-fast-lane-to-anarchy/" target="_blank">Deseret News / Reuter News Service, September 14, 1995</a>.</p>
  </aside>
 </section>
 
-<!-- 7 THIS TIME IS DIFFERENT -->
-<section class="slide">
- <div class="glow" style="width:1000px;height:1000px;right:-480px;top:-520px"></div>
- <div class="content">
+<!-- 8 THIS TIME IS DIFFERENT -->
+<section class="slide" data-continuous-agents>
+ <div class="glow" style="width:1100px;height:1100px;right:-690px;top:-470px;opacity:.28"></div>
+ <div class="content" style="top:118px">
   <div class="kicker">But this time is different</div>
-  <h1>Faster, bigger, and <span class="hl">compounding</span></h1>
-  <div style="position:absolute;left:0;right:0;top:230px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px">
-   <div><div class="u hl" style="font-size:150px;line-height:1">53%</div><p class="lead" style="font-size:26px;margin-top:16px">adoption of generative AI in 3 years, faster than the PC or the internet</p></div>
-   <div><div class="u hl" style="font-size:150px;line-height:1">1.2B</div><p class="lead" style="font-size:26px;margin-top:16px">people use ChatGPT every week</p></div>
-   <div><div class="u hl" style="font-size:150px;line-height:1">7<span style="font-size:70px"> mo</span></div><p class="lead" style="font-size:26px;margin-top:16px">for the length of tasks AI agents can finish to double</p></div>
+  <h1 style="font-size:66px;line-height:1.16">From “How do I do it?”<br>to <span class="hl">“Do it for me”</span></h1>
+  <svg viewBox="0 0 1360 430" style="position:absolute;left:0;top:210px;width:1360px;height:430px;overflow:visible" role="img" aria-label="Advice becomes action: a restrained ribbon expands from planning toward calling, acting, and ongoing work. Selected examples from April through October 2026 illustrate new possibilities for students to build useful solutions.">
+   <defs>
+    <linearGradient id="capability-ribbon" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A3A6BD" stop-opacity=".04"/><stop offset=".6" stop-color="#7CDEC7" stop-opacity=".14"/><stop offset="1" stop-color="#7CDEC7" stop-opacity="0"/></linearGradient>
+    <linearGradient id="capability-edge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A3A6BD" stop-opacity=".2"/><stop offset=".6" stop-color="#7CDEC7" stop-opacity=".65"/><stop offset="1" stop-color="#7CDEC7" stop-opacity=".04"/></linearGradient>
+   </defs>
+   <path d="M300 190C570 190 590 65 900 65H1360V370H900C590 370 570 240 300 240Z" fill="url(#capability-ribbon)"/>
+   <g fill="none" stroke="url(#capability-edge)" stroke-width="1.2">
+    <path d="M300 190C570 190 590 65 900 65H1360"/>
+    <path d="M300 203C570 203 590 117 900 117H1360"/>
+    <path d="M300 215H740M1250 215H1360"/>
+    <path d="M300 228C570 228 590 318 900 318H1360"/>
+    <path d="M300 240C570 240 590 370 900 370H1360"/>
+   </g>
+   <path class="opportunity-current" d="M300 215H740" fill="none" stroke="#7CDEC7" stroke-width="2" stroke-dasharray="32 1040" stroke-opacity=".7"/>
+   <g font-family="Urbanist,sans-serif">
+    <text x="0" y="235" fill="#A3A6BD" font-size="88" font-weight="500" letter-spacing="-3">Advice</text>
+    <text x="790" y="235" fill="#7CDEC7" font-size="126" font-weight="600" letter-spacing="-4">Action</text>
+    <text x="8" y="297" fill="#A3A6BD" font-family="Roboto,sans-serif" font-size="25" font-weight="300">Help me plan</text>
+    <text x="798" y="297" fill="#F4F5F8" font-family="Roboto,sans-serif" font-size="27" font-weight="300">Call · Act · Keep working</text>
+   </g>
+  </svg>
+  <div style="position:absolute;left:8px;right:0;top:670px;display:flex;align-items:center;gap:24px;color:var(--dim);font:500 20px Urbanist,sans-serif;letter-spacing:.08em">
+   <span>APRIL</span><span style="width:164px;height:1px;background:linear-gradient(90deg,var(--dim),var(--mint))"></span><span style="color:var(--mint)">OCTOBER 2026</span>
   </div>
-  <div style="position:absolute;left:10px;top:540px"><span class="pill u" style="font-size:34px;padding:10px 34px">The impact is different. Learn intensively, now.</span></div>
  </div>
- <p class="src">Sources: Stanford AI Index 2026 (Economy) · The Verge, Sep 29, 2026 · METR, Mar 2025</p>
  <aside class="notes">
-  <h3>Slide 7 · But this time is different · ~2 min</h3>
-  <p>And here's my honest answer: in some important ways, yes, this time is different.</p>
-  <p>Speed. According to the Stanford AI Index 2026, generative AI reached 53% adoption in three years, which is faster than the personal computer or the internet.</p>
-  <p>Scale. ChatGPT alone now has 1.2 billion weekly users, according to OpenAI, as reported by The Verge at the end of September.</p>
-  <p>Capability. METR measured that the length of tasks AI agents can complete on their own, at 50% reliability, has been doubling roughly every seven months for six years. A fair caveat: those are self-contained, well-specified tasks, and METR itself says that doesn't mean jobs are automated. But the trend line is steep.</p>
-  <p>The same AI Index chapter reports that employment for software developers aged 22 to 25 has fallen nearly 20% since 2024. I'm not saying that to scare you. I'm saying it because the impact is different in kind, and that changes the strategy. In past waves you could wait and pick things up later. This one moves too fast for that. The people who learn intensively now, not someday, get to ride the curve instead of chasing it.</p>
-  <p class="srcs">Sources: <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report/economy" target="_blank">Stanford AI Index 2026, Economy</a> · <a href="https://www.theverge.com/ai-artificial-intelligence/1002265/chatgpt-now-has-1-2-billion-weekly-users-openai-says" target="_blank">The Verge, Sep 29, 2026</a> · <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" target="_blank">METR, Mar 2025</a> · <a href="https://metr.org/time-horizons/" target="_blank">METR time-horizons FAQ</a></p>
+  <h3>Slide 8 · From “How do I do it?” to “Do it for me” · ~2 min</h3>
+  <p>The last slide showed that worries about technology have a history. So why does this wave feel different? AI reaches across a broad range of cognitive tasks, and it can use tools to act. Those capabilities are moving quickly. That opens up more problems you can build solutions for.</p>
+  <p>Look at this six-month stretch. In April, Meta showed AI helping plan a family trip: compare destinations, draft an itinerary, find activities. In September, it introduced Muse as an agent that could book travel and continue working after the app closed. That's a change in the kind of help you can hand over.</p>
+  <p>By today, Google's Gemini documentation describes calling businesses to book reservations, navigate phone menus, and wait on hold. Claude's October rollout puts new Cowork tasks and recurring work in the cloud on Pro and Max. Think about the possibilities: a booking assistant, a reservation desk, or a daily research scout for your lab.</p>
+  <p>And AI helps with the building itself: writing a first prototype, exploring an idea, and getting to something you can test faster. Meta's April examples already included creating websites from a prompt. So there's movement on both sides: what your solution can do, and how quickly you can start building it.</p>
+  <p>I'm not saying these problems were impossible throughout history. Something that was too slow, costly, or difficult for one student may now be practical to try. Find a problem you care about, and ask whether the new capability makes a useful solution possible. Progress doesn't mean every agent works reliably. That's why, on the next slide, I want to talk about both the potential and the remaining gap.</p>
+  <p class="srcs">Evidence and limits: these are selected product changes, not universal invention dates or a benchmark comparison. April's Meta AI already used multiple agents. Muse is an agent product; Muse Spark is a model. Gemini calling is a gradual rollout for eligible US adults using Pixel 11, a Google AI subscription, English, and the Phone app public beta; task details are reviewed and users can monitor or take over. October 6 expanded cloud Cowork for Pro and Max; cloud beta began July 7. Old local tasks remain local; local resources can need the desktop app. An ongoing goal can resume on schedules or events without continuous model inference. The three builder ideas are conceptual opportunities, not promises of consumer-product APIs or successful autonomous outcomes.</p>
+  <p class="srcs">Primary sources: <a href="https://about.fb.com/news/2026/04/introducing-muse-spark-meta-superintelligence-labs/" target="_blank">Meta AI / Muse Spark, original April 8, 2026 section (trip-planning example)</a> · <a href="https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/" target="_blank">Meta Muse, September 8, 2026 (booking travel, background work, approval)</a> · <a href="https://support.google.com/gemini/answer/18336420?hl=en" target="_blank">Gemini: Ask Gemini to handle everyday phone calls</a> · <a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile" target="_blank">Cowork cloud rollout, October 6, 2026</a> · <a href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork" target="_blank">Cowork recurring tasks</a> · <a href="https://support.claude.com/en/articles/12138966-release-notes" target="_blank">Claude release notes: initial July 7 cloud beta</a>. All checked October 13, 2026. “By October 13” is the date the calling capability was verified, not an asserted Gemini launch date. Use Gemini for the calling example: the Meta newsroom material reviewed does not establish autonomous Muse calling. Company documentation establishes described features and availability, not guaranteed successful outcomes.</p>
  </aside>
 </section>
 
-<!-- 8 MY OWN SWING -->
+<!-- 9 MY OWN SWING -->
 <section class="slide">
  <div class="glow" style="width:900px;height:900px;left:-480px;bottom:-520px"></div>
  <div class="content">
@@ -318,7 +499,7 @@ h1{font-size:76px}
  </div>
  <p class="src">Source: Scale AI &amp; CAIS, Remote Labor Index leaderboard, checked Oct 9, 2026 (labs.scale.com/leaderboard/rli)</p>
  <aside class="notes">
-  <h3>Slide 8 · My own swing · ~2 min</h3>
+  <h3>Slide 9 · My own swing · ~2 min</h3>
   <p class="todo">Before the talk: re-check the RLI leaderboard number (21.25% as of Oct 9, 2026).</p>
   <p>Let me tell you about my own swing on this, because I go back and forth.</p>
   <p>When I use a frontier model like Opus 4.6 for coding, there are moments when I genuinely think: is software development over? It writes things in minutes that would take me hours.</p>
@@ -329,7 +510,7 @@ h1{font-size:76px}
  </aside>
 </section>
 
-<!-- 9 WHAT'S COMING -->
+<!-- 10 WHAT'S COMING -->
 <section class="slide">
  <div class="glow" style="width:1000px;height:1000px;right:-560px;bottom:-460px"></div>
  <div class="dots" style="right:120px;top:140px"></div>
@@ -344,167 +525,121 @@ h1{font-size:76px}
  </div>
  <p class="src">Source: Wix press release, Jun 18, 2025 (~$80M initial consideration plus earn-outs) · Ctech by Calcalist</p>
  <aside class="notes">
-  <h3>Slide 9 · What's coming · ~2 min</h3>
+  <h3>Slide 10 · What's coming · ~2 min</h3>
   <p>So what's coming? Three things I'm fairly confident about.</p>
   <p>First, smaller teams. When each person has agents doing parts of the work, you need fewer people to ship something real. Paul Graham described a startup with six employees that told him they'd need about ten more people without AI.</p>
   <p>Second, more startups. Base44 is my favorite example. A solo founder, Maor Shlomo, built a vibe-coding platform, and Wix acquired it about six months after he founded it, for roughly $80 million up front plus earn-outs. The company had about six employees and no outside funding. That kind of outcome used to take a big team and venture money.</p>
   <p>Third, and this is the one I care about most: bigger, more complex problems get solved. When the cost of building drops, problems that were never worth a team's time suddenly become worth solving. Things get cheaper and faster, and the world starts to run more efficiently.</p>
-  <p>For you, this means the menu after graduation is bigger than "apply to a big company." You can join a tiny team, start one, or take on a problem nobody has bothered to fix. Let me show you one.</p>
+  <p>For you, this means the menu after graduation is bigger than "apply to a big company." You can join a tiny team, start one, or take on a problem nobody has bothered to fix. Start with a problem that makes you curious.</p>
   <p class="srcs">Sources: <a href="https://www.wix.com/press-room/home/post/wix-further-expands-into-vibe-coding-with-acquisition-of-base44-a-hyper-growth-startup-that-simplif" target="_blank">Wix press release, Jun 18, 2025</a> · <a href="https://www.calcalistech.com/ctechnews/article/s1iflnlelx" target="_blank">Ctech (Calcalist), Jun 18, 2025</a> · <a href="https://x.com/paulg/status/1994184673572839672" target="_blank">@paulg, Nov 27, 2025</a></p>
  </aside>
 </section>
 
-<!-- 10 A PROBLEM YOU CAN SOLVE -->
-<section class="slide">
- <div class="glow" style="width:900px;height:900px;left:-500px;top:-460px"></div>
- <div class="content">
-  <div class="kicker">A problem you can solve</div>
-  <h1 style="font-size:64px">The driver couldn't see them.</h1>
-  <div style="position:absolute;left:0;top:170px;width:660px">
-   <div class="u hl" style="font-size:150px;line-height:1">1/3</div>
-   <p class="lead" style="font-size:27px;margin-top:10px">of truck–car crashes happen in the truck's blind spots, the “No-Zone”</p>
-   <p class="lead" style="font-size:25px;margin-top:26px;color:var(--white)">AI vision can see what drivers can't.</p>
-   <p class="lead" style="font-size:21px;margin-top:6px">Mobileye Shield+ · EU blind-spot mandate since 2024</p>
-   <div style="margin-top:40px;margin-left:10px"><span class="pill u" style="font-size:40px;padding:8px 34px">You can build this.</span></div>
-  </div>
- </div>
- <svg style="position:absolute;left:870px;top:190px;z-index:2" width="620" height="600" viewBox="0 0 620 600">
-  <g fill="rgba(124,222,199,.16)" stroke="#7CDEC7" stroke-width="2" stroke-dasharray="7 7">
-   <rect x="225" y="20" width="150" height="70" rx="10"/>
-   <polygon points="352,115 610,190 610,420 362,290"/>
-   <polygon points="250,125 70,175 70,240 240,212"/>
-   <rect x="225" y="510" width="150" height="70" rx="10"/>
-  </g>
-  <rect x="250" y="95" width="100" height="80" rx="14" fill="#2C2F4D" stroke="#BFBFBF" stroke-width="2"/>
-  <rect x="240" y="185" width="120" height="315" rx="10" fill="#2C2F4D" stroke="#BFBFBF" stroke-width="2"/>
-  <text x="300" y="350" text-anchor="middle" font-family="Urbanist" font-weight="700" font-size="22" fill="#BFBFBF" transform="rotate(-90 300 350)">TRUCK</text>
-  <g><circle cx="520" cy="290" r="38" fill="none" stroke="#7CDEC7" stroke-width="2"/><circle cx="520" cy="290" r="54" fill="none" stroke="rgba(124,222,199,.4)" stroke-width="1.5"/>
-   <circle cx="520" cy="276" r="9" fill="#F4F5F8"/><path d="M506 312a14 18 0 0 1 28 0z" fill="#F4F5F8"/></g>
-  <path d="M350 110 505 260" stroke="#7CDEC7" stroke-width="2.5"/>
-  <circle cx="350" cy="110" r="9" fill="#7CDEC7"/>
-  <text x="395" y="90" font-family="Roboto" font-size="19" font-weight="500" fill="#7CDEC7">AI camera</text>
-  <text x="430" y="400" font-family="Urbanist" font-weight="700" font-size="24" fill="#F4F5F8">No-Zone</text>
- </svg>
- <p class="src">Sources: FMCSA, “CMV Driving Tips: Inadequate Surveillance” · Mobileye Shield+ · European Commission, Jul 2024</p>
- <aside class="notes">
-  <h3>Slide 10 · A problem you can solve · ~2.5 min</h3>
-  <p class="todo">TELL the SF story in your own words (what you saw, when, how it felt). Keep details respectful and avoid identifying anyone.</p>
-  <p>Let me give you an example of a problem like that, from my own life. Recently, I witnessed an accident in San Francisco. A truck driver's blind spot hid someone. The driver simply couldn't see them. <span class="fill">[Your story, in your words.]</span></p>
-  <p>It stuck with me, so I looked into it. According to the FMCSA, one-third of all crashes between large trucks and cars take place in the "No-Zone," the truck's blind spots. Their page says some of these blind spots are large enough that a passenger vehicle can "virtually disappear" from the driver's view. And IIHS reports that 5,340 people died in large-truck crashes in the US in 2024.</p>
-  <p>Here's the hopeful part: this is a vision problem, and AI vision can see what drivers can't. Products already exist. Mobileye Shield+ uses external cameras that constantly scan the blind spots and warns the driver when a pedestrian, cyclist or motorcyclist is detected. And since July 2024, the EU has required new trucks and buses to have technology that recognizes possible blind-spot hazards and warns the driver.</p>
-  <p>So the technology is real, but it's far from everywhere. Cheaper sensors, better models, retrofits for older fleets, city data on dangerous intersections: there's a lot left to build. Which brings me to the point: you can build this. With today's tools, a small team of students could prototype something meaningful in a semester.</p>
-  <p class="todo">Note: the FMCSA page was last updated in 2015, so the one-third figure is old. Do NOT claim the US has no truck blind-spot mandate; that is unverified.</p>
-  <p class="srcs">Sources: <a href="https://www.fmcsa.dot.gov/safety/driver-safety/cmv-driving-tips-inadequate-surveillance" target="_blank">FMCSA, Inadequate Surveillance</a> · <a href="https://www.iihs.org/research-areas/fatality-statistics/detail/large-trucks" target="_blank">IIHS Fatality Facts: Large trucks</a> · <a href="https://ims.mobileye.com/fleets/us/products/mobileye-shield-plus/" target="_blank">Mobileye Shield+</a> · <a href="https://single-market-economy.ec.europa.eu/news/mandatory-drivers-assistance-systems-expected-help-save-over-25000-lives-2038-2024-07-05_en" target="_blank">European Commission, Jul 5, 2024</a></p>
- </aside>
-</section>
-
-<!-- 11 GET CURIOUS -->
-<section class="slide">
- <div class="glow" style="width:1000px;height:1000px;right:-560px;top:-200px"></div>
- <div class="glow" style="width:900px;height:900px;left:-560px;bottom:-560px"></div>
- <div class="dots" style="right:170px;top:200px"></div>
- <div class="content" style="top:190px">
-  <h1 style="font-size:104px;font-weight:600;line-height:1.05">Don't just look<br>for jobs.</h1>
-  <div style="display:flex;align-items:center;gap:56px;margin:38px 0 0 14px">
-   <h1 class="pill" style="font-size:104px">Get curious.</h1>
-   <svg class="parrow" style="position:static" width="76" height="76"><use href="#arrowRight"/></svg>
-  </div>
-  <p class="lead" style="margin-top:62px;font-size:32px">Apply AI to your own problems first.</p>
- </div>
- <aside class="notes">
-  <h3>Slide 11 · Get curious · ~1.5 min</h3>
-  <p>And that's the mindset shift I want to leave you with. Don't just look for jobs. Get curious.</p>
-  <p>The job market is tough right now, and I'm not going to pretend otherwise. But the people I see doing well aren't just sending out hundreds of applications. They're the ones who noticed a problem, got curious, and started building.</p>
-  <p>Apply AI to your own problems first. What's annoying in your research workflow? What's broken in how your club organizes events? What's slow in your lab, your part-time job, or your family's business? Those are real problems with real users who will give you real feedback.</p>
-  <p>Pick one that bugs you and build your way into it. Two things happen. You learn the tools faster than any course could teach you, because you have a reason to. And you end up with something to show, which, as we'll see in a minute, is becoming what matters most in hiring.</p>
-  <p class="srcs">Sources: none (Vinay's own point).</p>
- </aside>
-</section>
-
-<!-- 12 FUNDAMENTALS + AI -->
+<!-- 11 FUNDAMENTALS + AI -->
 <section class="slide">
  <div class="glow" style="width:900px;height:900px;left:-520px;top:-440px"></div>
  <div class="content">
   <div style="width:560px;position:absolute;top:120px">
    <div class="kicker">How to prepare</div>
    <h1 style="font-size:88px">Fundamentals <span class="hl">+ AI</span></h1>
-   <p class="lead" style="margin-top:34px">AI multiplies what you already understand.</p>
+   <p class="lead" style="margin-top:34px;max-width:460px">Your understanding guides the work.</p>
   </div>
-  <div style="position:absolute;right:0;top:60px;width:690px;display:flex;flex-direction:column;gap:30px">
-   <div class="card mint" style="border-radius:999px;padding:30px 48px;display:flex;gap:30px;align-items:center"><span class="u" style="font-size:40px">01</span><span class="u" style="font-size:36px">Strong fundamentals</span></div>
-   <div class="card" style="border-radius:999px;padding:30px 48px;display:flex;gap:30px;align-items:center;border-color:var(--mint)"><span class="u hl" style="font-size:40px">02</span><span class="u" style="font-size:36px">Learn fast with AI</span></div>
-   <div class="card" style="border-radius:999px;padding:30px 48px;display:flex;gap:30px;align-items:center;border-color:var(--mint)"><span class="u hl" style="font-size:40px">03</span><span class="u" style="font-size:33px;line-height:1.15">Use AI, and build tools that make you productive</span></div>
+  <div style="position:absolute;right:0;top:36px;width:690px;display:flex;flex-direction:column;gap:24px">
+   <div class="card mint" style="border-radius:999px;min-height:114px;padding:26px 38px;display:flex;gap:28px;align-items:center;border-color:var(--mint)"><span class="u" style="font-size:36px">01</span><span class="u" style="font-size:32px;line-height:1.15">Master the fundamentals</span></div>
+   <div class="card" style="border-radius:999px;min-height:114px;padding:26px 38px;display:flex;gap:28px;align-items:center;border-color:var(--mint)"><span class="u hl" style="font-size:36px">02</span><span class="u" style="font-size:32px;line-height:1.15">Learn actively with AI</span></div>
+   <div class="card" style="border-radius:999px;min-height:114px;padding:26px 38px;display:flex;gap:28px;align-items:center;border-color:var(--mint)"><span class="u hl" style="font-size:36px">03</span><span class="u" style="font-size:32px;line-height:1.15">Prompt with precision</span></div>
+   <div class="card" style="border-radius:999px;min-height:114px;padding:26px 38px;display:flex;gap:28px;align-items:center;border-color:var(--mint)"><span class="u hl" style="font-size:36px">04</span><span class="u" style="font-size:32px;line-height:1.15">Build tools you actually use</span></div>
   </div>
  </div>
  <aside class="notes">
-  <h3>Slide 12 · Fundamentals + AI · ~2 min</h3>
-  <p>Now, "just build with AI" can be bad advice if you skip the foundations. So here's the formula I believe in: fundamentals plus AI.</p>
-  <p>One: strong fundamentals. Data structures, systems, math, how networks and databases actually work. Paul Graham said it well: even if AI writes most of your code, "you'll still be in the position of an engineering manager, and to be a good engineering manager you have to be a programmer yourself." Remember that calculator picket sign, "The Button's Nothin' 'Til the Brain's Trained"? The same 1986 article quotes researcher Marilyn Suydam: "The calculator is a tool for someone who already knows basic arithmetic." AI is the same.</p>
-  <p>Two: learn fast with AI. Use it as a tutor. Ask it to explain the paper, quiz you, critique your design. You can get into a new field in weeks now instead of semesters.</p>
-  <p>Three: learn to use AI as a builder, and build your own tools that make you productive. Write the script that automates your boring task. Set up an agent for your research pipeline. Karpathy's version, from notes he wrote about schools, is a nice target: be proficient in the use of AI, but able to exist without it.</p>
-  <p class="srcs">Sources: <a href="https://x.com/paulg/status/1947639333214687700" target="_blank">@paulg, Jul 22, 2025</a> · <a href="https://www.latimes.com/archives/la-xpm-1986-05-17-mn-5638-story.html" target="_blank">LA Times, May 17, 1986 (Suydam)</a> · <a href="https://x.com/karpathy/status/1993010584175141038" target="_blank">@karpathy, Nov 24, 2025</a></p>
+  <h3>Slide 11 · Fundamentals + AI · ~2.5 min</h3>
+  <p>So how do you prepare? I would focus on four habits that work together.</p>
+  <p>First, master the fundamentals. Data structures, systems, math, networks, databases: learn why things work, not just the syntax. That understanding helps you choose an approach and recognize when an AI answer is plausible but wrong. Simon Willison makes this point in his account of AI-assisted coding: existing expertise helps you direct the tool, and you still have to test what it produces.</p>
+  <p>Second, learn actively with AI. Use it to explain an unfamiliar concept, ask you questions, and critique your reasoning. Then try the problem yourself and explain the solution back. Finishing a task is not the same as learning it. A small study of developers learning a new library found that how people used AI mattered: the stronger learners asked conceptual questions and worked to understand the generated code. Treat that as a useful learning habit, not a promise that one technique always works.</p>
+  <p>Third, prompt with precision. Learn the language of your field so you can describe the problem accurately. Knowing what idempotency means, for example, helps you ask for retries that won't duplicate an order. The useful part is understanding the requirement; the technical term gives it a name. Give the AI the goal, relevant context, constraints, and what a good result looks like. If you don't know the terminology yet, ask it to help identify the concept, then check it against documentation. This is a communication skill you develop through practice and feedback.</p>
+  <p>Fourth, build tools you actually use. Start with a recurring task in your own work: processing lab data, organizing research, or checking a result. Use AI to help build a small tool, try it on real inputs, and improve it when it fails. That gives you practice directing AI and a concrete way to judge whether it helped. Fundamentals, active learning, precise instructions, and useful tools reinforce each other.</p>
+  <p class="srcs">Research basis: <a href="https://simonwillison.net/2025/Mar/11/using-llms-for-code/" target="_blank">Simon Willison, “Here's how I use LLMs to help me write code,” March 11, 2025</a> (practitioner account: context, specification, testing, expertise, and building small tools) · <a href="https://www.anthropic.com/research/AI-assistance-coding-skills" target="_blank">Shen and Tamkin / Anthropic, January 29, 2026: AI assistance and coding skill formation</a> (52 developers learning Trio; immediate comprehension test; interaction patterns are observational within the experiment, not proven causal learning strategies) · <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank">Claude prompting best practices</a> (clear instructions, context, examples, output constraints) · <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank">Anthropic, September 29, 2025: effective context engineering</a> (relevant context and iterative refinement). Sources reviewed October 14, 2026. The four habits and idempotency example are our synthesis, not quotations or a validated four-step framework. Technical vocabulary helps when it names a genuine requirement; jargon alone does not guarantee better results. Removed the unsupported “weeks instead of semesters” claim.</p>
  </aside>
 </section>
 
-<!-- 13 RESUMES -->
+<!-- 12 RESUMES -->
 <section class="slide">
- <div class="glow" style="width:1000px;height:1000px;right:-560px;top:-520px"></div>
- <div class="content">
-  <div class="kicker">Stand out</div>
-  <h1>Résumés built on <span class="hl">results</span></h1>
-  <div style="position:absolute;left:0;right:0;top:190px;display:grid;grid-template-columns:1fr 1fr;gap:40px">
-   <div class="card" style="height:330px"><div class="kicker" style="color:var(--grey);font-size:19px">Tools I know</div>
-    <ul style="list-style:none;font-size:29px;color:var(--grey);line-height:1.65;margin-top:8px"><li>Python · Java · C++</li><li>React · Docker</li><li>LangChain · …</li></ul></div>
-   <div class="card" style="height:330px;border-color:var(--mint);box-shadow:0 0 60px rgba(124,222,199,.18)"><div class="kicker" style="font-size:19px">What my project changed for real people</div>
-    <ul style="list-style:none;font-size:29px;line-height:1.65;margin-top:8px"><li><span class="hl">→</span> The problem</li><li><span class="hl">→</span> What I built</li><li><span class="hl">→</span> Who it helped, and how much</li></ul></div>
+ <div class="glow" style="width:1000px;height:1000px;right:-560px;top:-520px;opacity:.45"></div>
+ <div class="content" style="top:110px">
+  <div class="kicker">Your résumé</div>
+  <h1>Show what <span class="hl">you changed</span></h1>
+  <div style="position:absolute;left:0;right:0;top:184px;display:grid;grid-template-columns:.85fr 1.15fr;gap:64px">
+   <div class="u" style="font-size:21px;letter-spacing:.08em;color:var(--dim)">GENERIC CLAIM</div>
+   <div class="u hl" style="font-size:21px;letter-spacing:.08em">OWNERSHIP + EVIDENCE</div>
   </div>
-  <div style="position:absolute;left:0;top:560px;display:flex;align-items:center;gap:34px">
-   <div class="u hl" style="font-size:96px;line-height:1">67%</div>
-   <p class="lead" style="font-size:27px;max-width:700px">of HR leaders say AI-generated applications are slowing hiring</p>
+  <div style="position:absolute;left:0;right:0;top:232px;display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;border-top:1px solid rgba(191,191,191,.2);padding-top:22px">
+   <div>
+    <div class="u" style="font-size:19px;letter-spacing:.08em;color:var(--dim);margin-bottom:16px">01 · AGENT ENGINEERING</div>
+    <p style="font-size:27px;line-height:1.4;color:var(--grey)">Built an AI assistant with tool calling and memory.</p>
+   </div>
+   <p style="font-size:28px;line-height:1.4;padding-top:38px"><span class="hl">Merged a fix for duplicate agent replies into OpenClaw</span>; added a regression test and addressed maintainer feedback.</p>
   </div>
+  <div style="position:absolute;left:0;right:0;top:430px;display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;border-top:1px solid rgba(191,191,191,.2);padding-top:22px">
+   <div>
+    <div class="u" style="font-size:19px;letter-spacing:.08em;color:var(--dim);margin-bottom:16px">02 · PERSONAL PROJECT</div>
+    <p style="font-size:27px;line-height:1.4;color:var(--grey)">Developed an AI agent using LangGraph and an LLM.</p>
+   </div>
+   <p style="font-size:28px;line-height:1.4;padding-top:38px">Built an agent for my parents that <span class="hl">compares repair quotes and drafts follow-ups for approval</span>, replacing manual quote tracking.</p>
+  </div>
+  <p class="u" style="position:absolute;left:0;top:648px;font-size:29px">Use AI as an editor. <span class="hl">Keep your own voice.</span></p>
+  <p style="position:absolute;left:0;top:699px;font-size:17px;color:var(--dim)">Illustrative examples; replace with your own verified work.</p>
  </div>
- <p class="src">Source: Robert Half survey, press release Mar 10, 2026 (U.S. HR leaders)</p>
  <aside class="notes">
-  <h3>Slide 13 · Résumés built on results · ~2 min</h3>
-  <p>Let's talk about résumés. On the left is the résumé almost everyone sends: a list of tools. Python, React, Docker, LangChain. The problem is that everyone has the same list, and now AI can produce a polished version of it in seconds.</p>
-  <p>Hiring managers know this. A Robert Half survey released this year found that 67% of US HR leaders say reviewing AI-generated applications has slowed down hiring, and 65% of hiring managers say the surge in applications has made it harder to verify candidates' skills.</p>
-  <p>On the right is what actually stands out: what your project changed for real people. What was the problem? What did you build? Who used it, and what got better: time saved, errors reduced, people helped? Even a small number is powerful if it's real. For example, "a tool my lab uses every week" says more than "proficient in nine frameworks."</p>
-  <p>One more piece of context: the Stanford AI Index found that employment for developers aged 22 to 25 is down nearly 20% since 2024. When the entry-level door is narrower, being specific about impact is how you get through it.</p>
-  <p class="srcs">Sources: <a href="https://www.prnewswire.com/news-releases/robert-half-survey-67-of-hr-leaders-report-ai-generated-applications-are-slowing-hiring-302709410.html" target="_blank">Robert Half, Mar 10, 2026</a> · <a href="https://hai.stanford.edu/ai-index/2026-ai-index-report/economy" target="_blank">Stanford AI Index 2026, Economy</a></p>
+  <h3>Slide 12 · Show what you changed · ~3 min</h3>
+  <p>Let's make this concrete on a résumé. “Built an AI assistant with tool calling and memory” names capabilities, but doesn't tell me what you personally solved or how anyone checked the work. AI makes it easier to generate a demo or adapt an existing project. The stronger signal is a useful change you can explain and point to.</p>
+  <p>One route I would actively encourage is contributing to open source. Pick an agent project you actually use, like OpenClaw or Hermes Agent from Nous Research. Find a real issue, understand the existing code, make a focused change, test it, and respond to review. Getting a meaningful contribution accepted into an established project adds outside validation: you're meeting someone else's requirements and working through their feedback. That can be more informative than a standalone demo. OpenClaw explicitly welcomes AI-assisted contributions, with the same quality and review standards. Using AI doesn't remove your responsibility to understand the change.</p>
+  <p>The stronger résumé example imagines fixing duplicate agent replies in OpenClaw, adding a regression test, and getting the fix merged after review. It's an illustrative bullet, not a claim about a specific contributor or a verified pull request. In your own résumé, name the actual issue you solved and link your accepted contribution. Be ready to walk through the failure, the fix, and what reviewers asked you to change. A cloned repository is a useful starting point for learning; be clear about the work you added and credit the project you built on.</p>
+  <p>The second example is an agent for your parents: it compares repair quotes, identifies useful differences, and drafts follow-up questions for approval. The outcome is replacing manual quote tracking with a repeatable workflow. Now the project has a reason to exist, real users, and actions you can demonstrate. Explain what the agent does, where the person stays involved, and whether anyone actually uses it. Include measured time savings only if you have the measurements. A small project used by your family can be a strong story too.</p>
+  <p>One thing I don't want you handing entirely to AI is your résumé. Use its assistance: ask what is unclear, what detail is missing, or how to shorten a sentence. Then rewrite it in language you would actually use. I'd rather read an honest, slightly awkward sentence you can explain than a polished paragraph that says nothing about you. An occasional spelling or grammar mistake matters less to me than whether the work is yours. But still proofread: authentic doesn't have to mean careless, and other reviewers may judge those errors differently.</p>
+  <p>Harvard's career guidance puts it directly: “Generative AI should not be the primary author.” The University of Michigan says, “Edit the bullets so that they are accurate and written in your own voice.” That's the balance. Start with your facts, use AI for feedback, and own the final wording. Keep relevant technical terms, but don't borrow claims or invented numbers. Read every line aloud and ask yourself: could I explain exactly how I did this? The next slide is about making that work easy for someone else to check.</p>
+  <p class="srcs">Research reviewed October 14, 2026: <a href="https://careerservices.fas.harvard.edu/ai-resumes-and-cover-letters/" target="_blank">Harvard Mignone Center: AI for Resumes and Cover Letters</a> (primary-author quote, authentic representation, AI as suggested edits; full publisher text available in search index, direct page returned HTTP 429 during review) · <a href="https://careercenter.umich.edu/article/resume-resources" target="_blank">University of Michigan Career Center: Resume Resources</a> (exact own-voice quote; action + what + how/why/impact) · <a href="https://capd.mit.edu/blog/2023/09/01/enhance-your-resume-a-guide-for-first-year-undergraduates/" target="_blank">MIT CAPD: first-year résumé guide</a> (project/activity/results, audience relevance, real outcomes) · <a href="https://mitcommlab.mit.edu/aeroastro/commkit/resumes-and-cvs/" target="_blank">MIT AeroAstro Communication Lab: Résumés and CVs</a> (individual contribution, impact, proofreading) · <a href="https://docs.github.com/en/account-and-profile/tutorials/using-your-github-profile-to-enhance-your-resume" target="_blank">GitHub: enhance your résumé with your profile</a> (projects, open-source collaboration, documentation and tests) · <a href="https://www.roberthalf.com/us/en/insights/management-tips/ai-in-the-hiring-process-and-recruiting-strategies-for-tech-talent" target="_blank">George Denlinger / Robert Half: evaluating tech candidates in the AI era</a> (depth, ownership, impact).</p>
+  <p class="srcs">Agent-project sources, reviewed October 14, 2026: <a href="https://github.com/openclaw/openclaw/blob/main/CONTRIBUTING.md" target="_blank">OpenClaw contribution guide</a> (focused fixes, validation, maintainer feedback, AI-assisted PR quality standards) · <a href="https://github.com/NousResearch/hermes-agent" target="_blank">Nous Research: Hermes Agent</a> · <a href="https://github.com/NousResearch/hermes-agent/blob/main/CONTRIBUTING.md" target="_blank">Hermes Agent contribution guide</a>. Hermes Agent is the agent project intended here; OpenHermes refers to model releases. The outside-validation point is the speaker's interpretation of a documented contribution/review process, not a measured hiring advantage or a claim that all merged changes receive equally deep human review.</p>
+  <p class="srcs">Editorial distinction: all four bullets are hypothetical teaching examples authored for this slide. The OpenClaw example is not an attribution to an actual merged PR and does not establish that the current project has this defect. Maintainer acceptance provides evidence of an accepted contribution, not a guarantee of broad user impact or employment. The stronger versions add factual detail that must actually be true; wording alone cannot turn a generic claim into evidence. No claimed time savings, user totals, or business metrics were invented. OpenClaw and Hermes Agent are verified project examples; no contribution to either project was made as part of this slide edit. The speaker's tolerance for minor errors is a personal preference, not research that errors improve hiring outcomes. This comparison makes no promise about bypassing applicant tracking systems, detecting AI authorship, or securing an interview. A skills section can still be useful; this slide addresses experience and project bullets.</p>
  </aside>
 </section>
 
-<!-- 14 PUBLIC TRACK RECORD -->
-<section class="slide">
- <div class="glow" style="width:900px;height:900px;left:-500px;bottom:-500px"></div>
- <div class="dots" style="right:130px;bottom:140px"></div>
- <div class="content">
-  <div class="kicker">Build a public track record</div>
-  <h1 style="font-size:96px">Stack <span class="pill">proof.</span></h1>
-  <p class="lead" style="margin-top:44px;max-width:760px">Let people check your work. Hiring is moving beyond résumé filters.</p>
-  <div style="position:absolute;left:0;top:420px;display:flex;gap:20px">
-   <span class="card" style="border-radius:999px;padding:18px 34px;font-size:26px;border-color:var(--mint)">Original posts</span>
-   <span class="card" style="border-radius:999px;padding:18px 34px;font-size:26px;border-color:var(--mint)">Blogs</span>
-   <span class="card mint" style="border-radius:999px;padding:18px 34px;font-size:26px;font-weight:500">Media: demos, videos, talks</span>
-  </div>
-  <div class="card" style="position:absolute;right:0;top:40px;width:420px;padding:36px 40px">
-   <p class="u" style="font-size:54px">“Learn In Public.”</p>
-   <p class="u hl" style="font-size:24px;margin-top:18px">@swyx</p>
-  </div>
-  <p class="lead" style="position:absolute;left:0;top:540px;font-size:24px">Degrees still count. Proof stacks on top.</p>
+<!-- 13 PUBLIC TRACK RECORD -->
+<section class="slide" data-public-profile>
+ <div style="position:absolute;inset:0 0 0 620px;background:var(--mint)"></div>
+ <svg style="position:absolute;left:0;bottom:0;width:620px;height:520px;opacity:.22" viewBox="0 0 620 520" aria-hidden="true">
+  <g fill="none" stroke="#7CDEC7" stroke-width="1"><path d="M-120 520C120 520 60 90 620 90"/><path d="M-120 550C120 550 60 130 620 130"/><path d="M-120 580C120 580 60 170 620 170"/><path d="M-120 610C120 610 60 210 620 210"/><path d="M-120 640C120 640 60 250 620 250"/></g>
+ </svg>
+ <div style="position:absolute;left:100px;top:145px;width:440px">
+  <div class="kicker" style="font-size:19px;letter-spacing:.13em">Beyond the résumé</div>
+  <p class="u" style="font-size:64px;line-height:1.08;margin-top:38px">A résumé<br>is a snapshot.</p>
+  <p style="font-size:30px;line-height:1.4;color:var(--grey);margin-top:44px">Let your history<br>show the work.</p>
+  <div style="width:64px;height:2px;background:var(--mint);margin-top:56px"></div>
+  <p class="u" style="font-size:27px;line-height:1.4;margin-top:24px;color:var(--mint)">Create. Share. Repeat.</p>
  </div>
- <p class="src">Sources: x.com/swyx/status/1009174159690264579 · WGU Workforce Decoded 2026 · Harvard / Burning Glass Institute, 2024</p>
+ <div style="position:absolute;left:710px;right:100px;top:130px;color:var(--bg)">
+  <h1 style="font-size:100px;line-height:1.04;letter-spacing:-.035em">Build your<br>public profile.</h1>
+  <div style="margin-top:64px;display:flex;flex-direction:column;gap:0">
+   <div style="border-top:1px solid rgba(27,28,48,.25);padding:20px 0"><p class="u" style="font-size:34px;font-weight:600">Original posts</p></div>
+   <div style="border-top:1px solid rgba(27,28,48,.25);padding:20px 0"><p class="u" style="font-size:34px;font-weight:600">Articles &amp; blogs</p></div>
+   <div style="border-top:1px solid rgba(27,28,48,.25);padding:20px 0"><p class="u" style="font-size:34px;font-weight:600">Demos &amp; hackathons</p></div>
+   <div style="border-top:1px solid rgba(27,28,48,.25);border-bottom:1px solid rgba(27,28,48,.25);padding:20px 0"><p class="u" style="font-size:34px;font-weight:600">Real conversations</p></div>
+  </div>
+ </div>
  <aside class="notes">
-  <h3>Slide 14 · Build a public track record · ~2 min</h3>
-  <p>Which leads to my next point: build a public track record. People should be able to check your work.</p>
-  <p>Original posts on X or LinkedIn about what you're building. Not reposts; your own thinking. Blog posts and write-ups about what you learned, what broke, and how you fixed it. Media: demo videos, talks, open-source repos. swyx called this "Learn In Public," and it's still the best three-word career advice I know. Naval had a line this year that I love: "'What did you build this week?' is the new 'what did you get done this week?'"</p>
-  <p>Now, I want to be careful. I'm not saying degrees are dead. A big WGU survey of more than 3,000 hiring professionals, released at the end of September, found that 73% of employers still consider degrees important. And Harvard and the Burning Glass Institute found that skills-based hiring actually changed not even 1 in 700 hires.</p>
-  <p>What's changing is that employers want more proof, not less. In that same WGU survey, 60% said AI is making it harder to evaluate candidates' real skills. So the frame is: stack proof. Your degree, plus projects, plus public work that anyone can verify. That's how you get found, sometimes by people who never posted a job at all.</p>
-  <p class="srcs">Sources: <a href="https://x.com/swyx/status/1009174159690264579" target="_blank">@swyx, "Learn In Public."</a> · <a href="https://x.com/naval/status/2050072434943144398" target="_blank">@naval, May 1, 2026</a> · <a href="https://www.globenewswire.com/news-release/2026/09/30/3372298/0/en/60-of-Employers-Say-AI-Has-Made-Real-Skills-Harder-to-Evaluate-WGU-Workforce-Decoded-Report-Finds.html" target="_blank">WGU Workforce Decoded, Sep 30, 2026</a> · <a href="https://pw.hks.harvard.edu/post/skills-based-hiring-the-long-road-from-pronouncements-to-practice" target="_blank">Harvard / Burning Glass, Feb 2024</a></p>
+  <h3>Slide 13 · Build your public profile · ~3 min</h3>
+  <p>That brings me to a bigger point: your résumé is not your whole profile. A résumé is a snapshot of what you say you've done. A résumé bullet is easy to invent. I put more trust in a history that connects your posts, projects, feedback, and the people you worked with. Those connections give someone more ways to check what you actually did. So start building that history now.</p>
+  <p>In the agentic era, making a polished piece of content is easier. What makes your content useful is the firsthand experience behind it: your decisions, your experiments, your mistakes, and what changed when you tried again. Make original posts about something you actually learned or built. Instead of reposting an announcement, explain what happened when you used the tool. What worked? What failed? What would you do differently?</p>
+  <p>Then go deeper in articles and blog posts. Write the explanation you wish you'd had when you started. Show the example, the result, the limitation, and the link to the work. You don't need to be an expert before you write. You can say, “Here's what I tried, and here's what I still don't understand.” AI can help edit or organize it, but the observations and judgment should come from you.</p>
+  <p>Make demos. Go to hackathons. Publish a short walkthrough of what your team built and be clear about your own part. Then write the follow-up: what did you improve after someone used it? A working demo, an accepted pull request, and a thoughtful account of the tradeoffs tell a richer story together than any one of them alone.</p>
+  <p>I've seen this happen in my own career. A while back, I took part in a DeepMind hackathon in San Francisco and made it to the finals. There was a recruiter at the event, and I was contacted afterward. That connection became part of the path that brought me to Google. What made that opportunity possible was having something to show: people could see the work, rather than just read about it on a résumé.</p>
+  <p>And meet people around the work. Talk to other builders, ask a useful question, share your write-up, help with their project, and follow up. Networking becomes more natural when there's something specific to talk about. Over time, people have seen how you think, how you build, and how you respond to feedback.</p>
+  <p>That's what I mean by building a profile. Your résumé can point to it, but a few polished sentences can't replace it. This is not a contest to post every day or collect followers. Create something useful, share what you learned, and keep going. Let your body of work grow alongside your skills.</p>
+  <p class="srcs">Primary sources reviewed October 14, 2026: <a href="https://swyx.io/learn-in-public" target="_blank">Shawn Wang / swyx, Learn In Public, June 19, 2018</a> (original writing, talks, demonstrations, documentation, relationships; useful work over popularity) · <a href="https://docs.github.com/en/account-and-profile/tutorials/using-your-github-profile-to-enhance-your-resume" target="_blank">GitHub: Using your GitHub profile to enhance your résumé</a> (showcase projects and contributions, make the work understandable) · <a href="https://simonwillison.net/2025/Mar/11/using-llms-for-code/" target="_blank">Simon Willison: Here's how I use LLMs to help me write code, March 11, 2025</a> (public tools, development history, linked transcripts as a practitioner example). The hackathon account is Vinay's firsthand story shared in this conversation: a DeepMind hackathon in San Francisco, finalist participation, a recruiter present, and outreach afterward connected to his path to Google. No event date, project, prize, recruiter identity, or direct hiring guarantee is inferred. The slide's wording, activity suggestions, and argument about accumulating a checkable history are the speaker's synthesis, not quotations or measured hiring outcomes.</p>
+  <p class="srcs">Framing: a public history is not impossible to fabricate, and a résumé can contain verifiable links. The point is that connected artifacts, public review, repeated follow-through, and collaborators offer more evidence to examine. Content volume, follower counts, hackathon attendance, and polished demos alone do not prove competence. Do not share confidential project material. No claim is made that public posting is mandatory for employment or that credentials no longer matter.</p>
  </aside>
 </section>
 
-<!-- 15 VOICES -->
+<!-- 14 VOICES -->
 <section class="slide">
  <div class="glow" style="width:900px;height:900px;right:-520px;top:-500px"></div>
  <div class="content" style="top:120px">
@@ -517,7 +652,7 @@ h1{font-size:76px}
   </div>
  </div>
  <aside class="notes">
-  <h3>Slide 15 · Voices worth following · ~1.5 min</h3>
+  <h3>Slide 14 · Voices worth following · ~1.5 min</h3>
   <p>Here are a few people I'd recommend following, because they shape how I think about this.</p>
   <p>Paul Graham, on why you should still learn to program even if AI writes most of your code: you'll be the engineering manager, and good engineering managers are programmers themselves.</p>
   <p>Naval: "'What did you build this week?' is the new 'what did you get done this week?'"</p>
@@ -528,7 +663,7 @@ h1{font-size:76px}
  </aside>
 </section>
 
-<!-- 16 THANK YOU -->
+<!-- 15 THANK YOU -->
 <section class="slide">
  <div class="glow" style="width:1100px;height:1100px;right:-430px;top:-480px"></div>
  <div class="glow" style="width:1000px;height:1000px;left:-300px;bottom:-760px"></div>
@@ -544,7 +679,7 @@ h1{font-size:76px}
   </div>
  </div>
  <aside class="notes">
-  <h3>Slide 16 · Thank you + Q&amp;A · ~1 min, then Q&amp;A</h3>
+  <h3>Slide 15 · Thank you + Q&amp;A · ~1 min, then Q&amp;A</h3>
   <p class="todo">FILL IN your X handle, LinkedIn URL and personal site.</p>
   <p>So, to wrap up. The shift is real. It's moving faster than anything before it, and it's full of opportunity for people who build.</p>
   <p>Keep your fundamentals strong. Learn intensively, with AI. Get curious about real problems. And build in public, so people can see your work.</p>
@@ -554,7 +689,7 @@ h1{font-size:76px}
  </aside>
 </section>
 
-<div id="counter">01 / 16</div>
+<div id="counter">01 / 15</div>
 <div id="progress"></div>
 </div>
 
@@ -562,7 +697,7 @@ h1{font-size:76px}
 (function(){
  var slides=[].slice.call(document.querySelectorAll('.slide')),i=0,stage=document.getElementById('stage'),
   panel=document.getElementById('panel'),btn=document.getElementById('scriptBtn'),
-  counter=document.getElementById('counter'),prog=document.getElementById('progress'),tr=document.getElementById('topright');
+  counter=document.getElementById('counter'),prog=document.getElementById('progress');
  var B=document.body,aud=/audience/.test(location.search),pres=false,t0=0,fs=+(localStorage.getItem('ubFs')||26),bc=null,ls=0;
  function $(x){return document.getElementById(x)}
  if(/render/.test(location.search))B.classList.add('render');
@@ -586,7 +721,6 @@ h1{font-size:76px}
   counter.style.visibility=i?'visible':'hidden';
   counter.textContent=pad(i+1)+' / '+pad(slides.length);
   prog.style.width=((i+1)/slides.length*100)+'%';
-  tr.style.visibility=slides[i].hasAttribute('data-noright')?'hidden':'visible';
   var nt=slides[i].querySelector('.notes');panel.innerHTML=nt?nt.innerHTML:'';
   pv();if(!remote&&(old!==i||!ls))send({i:i});ls=1;
   if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+'#'+(i+1));

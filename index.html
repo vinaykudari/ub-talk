@@ -98,18 +98,42 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
 #pvScript p{margin-bottom:.7em}#pvScript .todo,#pvScript .srcs{font-size:.6em;color:var(--dim)}#pvScript .fill{color:var(--mint)}
 #panel{position:fixed;top:0;right:0;bottom:0;width:min(560px,42vw);background:#14152a;border-left:1px solid rgba(124,222,199,.3);z-index:15;padding:56px 32px 32px;overflow-y:auto;transform:translateX(100%);transition:transform .3s ease;font-size:17px;line-height:1.6;color:#E2E4EC}
 #panel.open{transform:none}
+#panel:not(.open){visibility:hidden}
+#panel details{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
+#panel summary{cursor:pointer;color:var(--dim);font-size:14px}
+#panel details .srcs{border:0;padding-top:12px}
+#mobileNav{display:none}
+button:focus-visible,summary:focus-visible{outline:2px solid var(--mint);outline-offset:4px}
+button:disabled{opacity:.3!important;cursor:default}
 #panel h3{font-family:Urbanist;font-weight:700;color:var(--mint);font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
 #panel p{margin-bottom:14px}
 #panel .todo{background:rgba(124,222,199,.1);border-left:3px solid var(--mint);padding:8px 12px;font-size:15px}
 #panel .srcs{font-size:13px;color:var(--dim);border-top:1px solid rgba(191,191,191,.2);padding-top:12px;word-break:break-word}
 #panel a{color:var(--mint)}
 #panel .fill{color:var(--mint);font-weight:500}
+
+@media(max-width:900px){
+ body:not(.audience):not(.presenter):not(.render) #ctl{left:0;right:0;top:0;height:64px;align-items:center;justify-content:space-between;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left));background:#101120;border-bottom:1px solid rgba(124,222,199,.15)}
+ body:not(.audience):not(.presenter):not(.render) #presentBtn{display:none}
+ #mobileNav{display:flex;align-items:center;gap:12px}
+ #mobileNav button,#scriptBtn{min-height:44px;min-width:44px;opacity:1}
+ #mobileNav button{border:1px solid var(--line);border-radius:14px;background:var(--bg2);color:var(--mint);font-size:22px;cursor:pointer;touch-action:manipulation}
+ #mobileCount{font:600 15px Urbanist,sans-serif;color:var(--grey);min-width:54px;text-align:center;font-variant-numeric:tabular-nums}
+ body:not(.audience):not(.presenter):not(.render) #scriptBtn{font-size:15px;font-weight:500;padding:8px 18px;color:var(--mint);border-color:var(--mint);background:var(--bg2)}
+ body:not(.audience):not(.presenter):not(.render) #scriptBtn.on{background:var(--mint);color:var(--bg)}
+ body:not(.audience):not(.presenter):not(.render) #stage{box-shadow:none}
+ body:not(.audience):not(.presenter):not(.render) #panel{left:0;right:0;bottom:0;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:24px 24px 0 0;padding:24px max(22px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));font-size:18px;line-height:1.7;transform:none;transition:none;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;overflow-wrap:anywhere}
+ #panel h3{font-size:13px;line-height:1.5;letter-spacing:.08em}
+ #panel p{margin-bottom:20px}
+ .presenter #mobileNav{display:none}
+}
+@media(prefers-reduced-motion:reduce){#panel{transition:none}}
 </style>
 </head>
 <body>
-<div id="ctl"><button id="presentBtn" title="Presenter mode: opens the audience window (P)">Present</button><button id="scriptBtn" title="Toggle speaker script (N)">Script</button></div>
+<div id="ctl"><nav id="mobileNav" aria-label="Slide navigation"><button id="prevBtn" aria-label="Previous slide">&#8592;</button><span id="mobileCount" aria-live="polite">1 / 15</span><button id="nextBtn" aria-label="Next slide">&#8594;</button></nav><button id="presentBtn" title="Presenter mode: opens the audience window (P)">Present</button><button id="scriptBtn" aria-controls="panel" aria-expanded="false" title="Toggle speaker script (N)">Show script</button></div>
 <div id="pv"><div class="pvtop"><div class="pvinfo"><div id="pvNum">01 / 15</div><div><span id="pvTime">00:00</span> <button id="pvReset">Reset</button></div><div><button id="pvMinus" title="Smaller script (-)">A&minus;</button> <button id="pvPlus" title="Larger script (+)">A+</button></div></div><div id="pvNext"><div id="pvNextIn"></div></div></div><div class="pvhint">Share the Audience window in Zoom.</div><div id="pvScript"></div></div>
-<aside id="panel"></aside>
+<aside id="panel" aria-label="Speaker script" aria-hidden="true" inert></aside>
 <svg width="0" height="0" style="position:absolute">
  <defs>
   <symbol id="xlogo" viewBox="0 0 24 24"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></symbol>
@@ -138,9 +162,9 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  <p style="position:absolute;left:120px;bottom:48px;font-size:18px;color:var(--dim);z-index:3">Vinay Kudari</p>
  <aside class="notes">
   <h3>Slide 1 · Title · ~1 min</h3>
-  <p>Hi everyone, and thank you to the UB Industry Summit team for having me. I'm Vinay Kudari. I'm a software engineer at Google, and I work on agentic AI.</p>
-  <p>It's really special to be talking to UB again, even over Zoom. Not that long ago, I was sitting right where a lot of you are.</p>
-  <p>Today I want to talk about building in the age of agents. I'll cover three things. What I actually work on. Why I think this moment is different from every other "this technology will ruin everything" moment. And, most importantly, things you can start doing this week. Let's get into it.</p>
+  <p>Hi everyone, thanks for having me, and thank you to the UB Industry Summit team for putting this together. I'm Vinay Kudari, and I'm a software engineer working on agentic AI at Google.</p>
+  <p>It's genuinely special to be talking to UB again, because not that long ago I was sitting exactly where a lot of you are sitting.</p>
+  <p>Today I want to talk about what it means to build in the age of agents. Three things: what I actually work on, why I think this moment is different from every other "this technology will ruin everything" moment, and, most importantly, concrete things you can start doing this week. Let's get into it.</p>
   <p class="srcs">Sources: none (title slide).</p>
  </aside>
 </section>
@@ -167,14 +191,12 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
   </div>
  </div>
  <aside class="notes">
-  <h3>Slide 2 · From 2022 to 2026 · ~2 min</h3>
-  <p>First, a quick bit on how I got here. Honestly, in my bachelor's I was an average student. Not a bad one, but not a great one either. Things really changed when I came to UB for my master's in Computer Science.</p>
-  <p>At UB, I loved taking the hard courses. And here's my one piece of advice on that: don't skip the hard classes just to make room for interview prep. I picked the hardest ones I could, and I still found time to prep. It was probably one of the most strenuous stretches of my life. But it was worth it.</p>
-  <p>When I started job hunting, I made one choice that ended up being one of the best things I did for my career: I only applied to jobs in San Francisco. I wouldn't tell everyone to do that. But for me, it paid off. Being in the city meant I could go to events in person, meet really great engineers, just talk to people, and go to hackathons. I learned so much faster from being around people like that.</p>
-  <p>From there, I joined Amazon in 2022 and worked on AWS Health. In 2023 I was at Gap, working on personalization. In 2024 I moved to Apple Finance at Apple. And now, in 2026, I'm at Google, working on Google Cloud.</p>
-  <p>Through all of that, especially in those early years, I kept pushing outside of work. Building side projects, doing algorithm challenges, meeting people, going to hackathons, while still keeping up with my day job. It was hectic. But if I look back, what helped most wasn't talent. It was being consistent, working hard, and staying curious.</p>
-  <p>That's the path from UB to the work I want to show you today.</p>
-  <p class="srcs">Verified Oct 15, 2026: Vinay's LinkedIn post announces two years building agentic systems for finance at Apple before joining Google. Experience listings also include Gap and AWS. PlayStation/pre-UB roles left off this slide by design.</p>
+  <h3>Slide 2 · From 2022 to 2026 · ~3 min</h3>
+  <p>A quick bit on how I got here. I graduated from UB with my M.S. in Computer Science in 2022, and started at Amazon, working on data pipelines and backend systems.</p>
+  <p>Then I moved to Gap, expecting to work on machine learning systems. The recommendation systems I ended up working on weren't ML-based, so it wasn't quite the move I had imagined. But I kept looking for opportunities through side projects and hackathons at work. Eventually, I was able to pivot into ML. That was my first transition into machine learning within a company.</p>
+  <p>After that, I moved to Apple, where most of my work was on agentic systems for finance. Those were mainly internal projects, but the experience opened a path to my current role at Google as an agentic engineer.</p>
+  <p>A significant part of my job now is research, which is something I'd always wanted to do. It took about four years of being intentional about the work I pursued to get here. My coursework, projects, and time working with professors at UB all played a big part in that journey.</p>
+  <p>So if I could pause here and give one piece of advice: don't choose your courses just because they're easy and leave you more time for interview prep. Preparing for interviews matters, but this is also your chance to explore. If you haven't found what interests you yet, take courses that help you figure that out. And if you already know what interests you, go deep. The understanding and experience you build now can shape opportunities well beyond your first job.</p>
   <p class="srcs">Sources: Vinay's own background.</p>
  </aside>
 </section>
@@ -188,7 +210,7 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
    <h1 style="font-size:64px;line-height:1.12">Making Google Cloud</h1>
    <h1 class="hl" style="font-size:100px;font-weight:600;margin-top:14px;letter-spacing:-.02em">agentic<span style="color:var(--white)">.</span></h1>
    <svg aria-hidden="true" width="100" height="24" style="display:block;margin:36px 0 26px;color:var(--mint)"><path d="M2 12h78" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="1 10" stroke-linecap="round"/><path d="m78 5 8 7-8 7" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
-   <p style="font-size:28px;font-weight:500">Building a cloud operator agent</p>
+   <p style="font-size:28px;font-weight:500">Building a harness for Gemini</p>
    <p class="lead" style="font-size:26px;margin-top:10px;max-width:540px">Helping run real cloud infrastructure.</p>
   </div>
  </div>
@@ -200,7 +222,7 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
    <marker id="architectureArrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="m2 1 3 3-3 3" fill="none" stroke="#7CDEC7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
   </defs>
   <text x="370" y="65" text-anchor="middle" font-family="Roboto,sans-serif" font-size="14" letter-spacing="2.4" fill="#A3A6BD">CONCEPTUAL ARCHITECTURE</text>
-  <text x="370" y="101" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="28" font-weight="600" fill="#F4F5F8">Cloud operator agent</text>
+  <text x="370" y="101" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="28" font-weight="600" fill="#F4F5F8">Gemini + harness</text>
   <rect x="110" y="133" width="520" height="236" rx="24" fill="url(#harnessSurface)" stroke="#7CDEC7" stroke-opacity=".65" stroke-width="1.5" filter="url(#harnessDepth)"/>
   <path d="M137 193h466" stroke="#7CDEC7" stroke-opacity=".18"/>
   <g transform="translate(138 155)" fill="none" stroke="#7CDEC7" stroke-width="2" stroke-linecap="round"><path d="M7 0H0v18h7M17 0h7v18h-7M10 5l-3 4 3 4M14 5l3 4-3 4"/></g>
@@ -233,14 +255,11 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  </svg>
  <aside class="notes">
   <h3>Slide 3 · What I work on · ~2 min</h3>
-  <p class="todo">CONFIRM with your team exactly what is OK to share about the cloud operator agent. Keep it to public descriptions. Everything quoted below is from public Google Cloud blog posts.</p>
-  <p>So what do I actually do? The short version: I help make Google Cloud agentic. I work on a cloud operator agent. That's an agent that helps run real cloud infrastructure.</p>
-  <p>Here's what Google has said publicly. At Cloud Next in April, Google showed a more proactive Gemini Cloud Assist. It calls it "our AI-assisted cloud operations platform … supported by a powerful ecosystem of agents." There are troubleshooting agents that jump in through gcloud, kubectl and Terraform when an alert fires. There's a cost-anomaly agent that runs 24/7. And the post literally ends with: "The future of operations is agentic."</p>
-  <p>Next '26 also introduced the Gemini Enterprise Agent Platform. Think of it as the next step for Vertex AI, with the Agent Development Kit, Agent Runtime and Agent Evaluation. Many of those pieces opened up to everyone in July.</p>
-  <p>Why should you care? Running a cloud used to mean a person staring at dashboards at 3 a.m. More and more, it means building agents that do that work, and people who know how to build, test and trust them.</p>
-  <p>A teammate of mine, Ryan Lopopolo, put the goal really well: "i want to make google cloud the best computer for agents such that they can operate it exceedingly well." That's the mission in one sentence.</p>
-  <p class="srcs">Public source: Vinay's X post quoting Ryan Lopopolo from The Agent Factory, <a href="https://x.com/kudarivinay/status/2102582562090864757" target="_blank">x.com/kudarivinay/status/2102582562090864757</a> (Sep 23, 2026); "happy to be working alongside ryan on autonomous cloud," <a href="https://x.com/kudarivinay/status/2093289244223758538" target="_blank">x.com/kudarivinay/status/2093289244223758538</a>. Quote copied verbatim, including lowercase.</p>
-  <p class="srcs">Sources: <a href="https://cloud.google.com/blog/products/application-development/gemini-cloud-assist-at-next26" target="_blank">Gemini Cloud Assist at Next '26</a> · <a href="https://cloud.google.com/blog/topics/google-cloud-next/google-cloud-next-2026-wrap-up" target="_blank">Next '26 wrap-up</a> · <a href="https://cloud.google.com/blog/products/ai-machine-learning/whats-new-in-gemini-enterprise-agent-platform" target="_blank">What's new in Gemini Enterprise Agent Platform</a></p>
+  <p class="todo">CONFIRM with your team exactly what is OK to share about the harness and its capabilities. Keep it to public descriptions. Everything quoted below is from public Google Cloud blog posts.</p>
+  <p>So what do I actually work on? The short version: making Google Cloud agentic. Specifically, I work on a harness for Gemini that enables it to use tools and carry out tasks across cloud infrastructure.</p>
+  <p>For public context, here's what Google has announced. At Google Cloud Next in April, Google unveiled a more proactive Gemini Cloud Assist, described as "our AI-assisted cloud operations platform … supported by a powerful ecosystem of agents." That includes troubleshooting agents that work through gcloud, kubectl and Terraform when an alert fires, and a cost-anomaly agent that runs 24/7. The post literally ends with: "The future of operations is agentic."</p>
+  <p>Think of GCP as a huge, complex computer shared by lots of people using it at the same time. Each person or team has services running on it that need to be managed and maintained. We're building the harness that lets Gemini use that computer on your behalf. The goal is to help operate and maintain your services without you having to manually step through every task.</p>
+  <p class="srcs">Sources: <a href="https://cloud.google.com/blog/products/application-development/gemini-cloud-assist-at-next26" target="_blank">Gemini Cloud Assist at Next '26</a></p>
  </aside>
 </section>
 
@@ -285,10 +304,10 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  </svg>
  <aside class="notes">
   <h3>Slide 4 · Two improvement paths · ~1 min</h3>
-  <p>Here's the big picture. Our harness uses Gemini to work across GCP and get real tasks done. Gemini is the model inside the system. The solid lines are the everyday path: harness, then tasks, then feedback.</p>
-  <p>The dotted lines are where it gets interesting. The first one goes from feedback back to the harness. That's our main project: helping the harness improve itself, so the agent gets better at its job. The second one goes back to Gemini. The same tasks and feedback can help improve the model too. That's a second goal, and it's a separate path from the harness loop.</p>
-  <p>Let me zoom in on that harness loop.</p>
-  <p class="srcs">Sources: Vinay's description of the project and its goals.</p>
+  <p>I've used the word harness a few times, so what does that mean? It's the software around the model that lets it actually get work done. Gemini provides the reasoning. The harness gives it the tools and context to act, keeps track of what's happened, and controls what it's allowed to do.</p>
+  <p>Say a cloud service stops responding. The model might decide to check the logs. The harness runs that tool and brings the results back to the model, which can then decide what to try next. That cycle continues until the task is done, or the agent needs help or approval.</p>
+  <p>So the goal is to improve both together: use what we learn from real tasks to recursively improve the harness, while also improving Gemini's performance through post-training. Let me show you how that harness improvement loop works.</p>
+  <p class="srcs">Sources: Vinay's description of the project and its goals · <a href="https://cloud.google.com/discover/agent-harness" target="_blank">Google Cloud: What is an agent harness?</a></p>
  </aside>
 </section>
 
@@ -344,11 +363,11 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  </svg>
  <aside class="notes">
   <h3>Slide 5 · Real-use-driven harness improvement · ~2 min</h3>
-  <p>GCP has a lot of moving parts. People ask the agent to manage their own infrastructure, and they ask for all kinds of things. The harness uses Gemini to try those tasks. Some of them are hard, and some don't go well. Those are the interesting ones, because they show us what the harness can't do well yet.</p>
-  <p>Those gaps are our feedback. We use them to make the harness better at the next request. And the next requests show us new gaps. So it keeps going. This picture is the idea, not the exact mechanics of how feedback gets collected or turned into changes.</p>
-  <p>On this slide I'm focusing on the harness. The path back to Gemini from the last slide still exists. I've just left it out here to keep things simple.</p>
-  <p class="srcs">Background research: Darwin Gödel Machine and SICA illustrate agent implementations improving from execution feedback. Their benchmark/archive mechanisms are not presented as our implementation. This slide follows Vinay's account of real user tasks and capability gaps, rather than their candidate-search process.</p>
-  <p class="srcs">Project narrative: Vinay's description. Background inspiration: <a href="https://arxiv.org/html/2505.22954v1" target="_blank">Darwin Gödel Machine (Zhang et al., 2025), Figure 1 and Section 3</a> · <a href="https://arxiv.org/html/2504.15228v1" target="_blank">A Self-Improving Coding Agent (Robeyns et al., 2025), Figure 1 and Section 3</a>. Original conceptual illustration.</p>
+  <p>GCP has many moving parts. Users bring a wide range of requests for managing their infrastructure. Gemini works through the harness to attempt those tasks across GCP. Some difficult or unsuccessful cases reveal things that the current harness cannot yet do well.</p>
+  <p>Those capability gaps provide useful feedback for improving the harness. The goal is better handling of future user requests, and those future requests continue to expose new opportunities to improve.</p>
+  <p>Post-training means giving an already-trained model more focused training so it gets better at particular tasks. Useful examples could include a task, the tools available, the actions taken, the results those tools returned, and a checked outcome. A good demonstration shows how to do the task; a failed attempt helps us find situations the model needs more practice with.</p>
+  <p>Think back to how you might have trained your first reinforcement learning model. You let an agent explore an environment, try different actions, and receive rewards for making progress or completing the task. Training makes the behavior that earns those rewards more likely. It's the same basic idea here, except the actions involve using tools to work on cloud infrastructure. For example, did it actually restore a service and pass the checks, while respecting the constraints? That's the kind of result we want to reward, rather than just an answer that sounds convincing.</p>
+  <p class="srcs">Project goals: Vinay's description. General post-training explanation and illustrative example, not a claim about a specific internal training method or dataset. Reference: <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/tuning/reinforcement-tuning" target="_blank">Google Cloud: Reinforcement learning fine-tuning</a>. Original conceptual illustration.</p>
  </aside>
 </section>
 
@@ -391,11 +410,12 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
   </g>
  </svg>
  <aside class="notes">
-  <h3>Slide 6 · Fix one thing, keep everything else working · ~1.5 min</h3>
-  <p>Here's one of the hard parts. With so many different real tasks, how do you spot the failures that keep coming back? When I say "loss" here, I mean places where the agent does badly, not a training loss function.</p>
-  <p>And once you find one, fixing it isn't enough. A change that helps one kind of task can break another one that already worked. So the goal is what you see here: fix the recurring problem and keep everything else working. That's the goal, not a result I'm claiming we've measured.</p>
-  <p>Scale makes both parts harder. It's hard to find patterns in that much feedback, and hard to know how one change plays out across everything people do on GCP. I'm describing the challenge here, not a specific algorithm or pipeline.</p>
-  <p class="srcs">Source: Vinay's description of the project's challenges.</p>
+  <h3>Slide 6 · Fix one thing, keep everything else working · ~2 min</h3>
+  <p>A practical challenge is finding recurring failure or loss patterns in the agent's actions. Agents aren't deterministic: the same request can lead to different sequences of actions, and there are often several valid ways to solve a problem. So we can't judge every run against one exact sequence of steps.</p>
+  <p>By a loss pattern, I mean a recurring weakness in how the agent tackles a task. It doesn't have to fail outright. It might finish, but keep making unnecessary tool calls, retrying something that won't work, or making a broad change when a smaller one would have been enough. We're looking at how it got to the result, as well as whether it got there.</p>
+  <p>How do we make this debugging superhuman? How can we spot a shared weakness across thousands of very different attempts, understand what's causing it, and improve the harness without breaking something else that already works? That's a big part of the challenge.</p>
+  <p>And privacy and security have to be part of that from the start. These systems may have access to sensitive data and the ability to change live infrastructure. A small mistake, like changing the wrong configuration, could take a service offline. Think about the stakes for a service at Spotify's scale; Spotify uses Google Cloud. An outage can interrupt people's access, lose business, and damage trust. Every minute matters. The agent needs to respect permissions, protect data, and know when to ask for approval.</p>
+  <p class="srcs">Project challenges: Vinay's description. Behavioral examples and outage scenario are illustrative. Customer reference: <a href="https://cloud.google.com/customers/featured/spotify" target="_blank">Spotify on Google Cloud</a>. No specific financial loss rate is asserted.</p>
  </aside>
 </section>
 
@@ -435,8 +455,9 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  </div>
  <aside class="notes">
   <h3>Slide 7 · Will AI Take Our Jobs? · ~2 min</h3>
-  <p>Now let's zoom out. If you're about to start your career, "Will AI take our jobs?" is a fair question. And people have asked it before. In 1930, a letter in a newspaper warned that electric power would put thousands out of work. In 1945, the Los Angeles Times called the atomic bomb "man's most destructive force." People really feared it could end the world. And it's still dangerous. But it's also helped keep the big powers out of another world war, and it pushed the world to be more responsible. I think AI fear is a bit like that. In 1995, news reports said the internet would probably destroy jobs. Those worries weren't all the same, and they weren't all wrong.</p>
-  <p>I think of tech change as a kind of evolution. It can be messy and uncertain, and people have to adapt. But history doesn't tell us exactly how this one will go. AI touches a huge range of thinking work, and it's improving fast. So let's look at what makes this wave different.</p>
+  <p>Now let's talk about the question on a lot of our minds: will AI take our jobs? Here's my take. We're not the first generation to start our careers wondering whether a new technology will change the future we've been preparing for. Different generations have faced their own version of that uncertainty.</p>
+  <p>In 1930, a letter in a newspaper warned that electric power would put thousands out of work. In 1945, the Los Angeles Times called the atomic bomb "man's most destructive force." People really feared it could end the world. And it's still dangerous. But it's also helped keep the big powers out of another world war, and it pushed the world to be more responsible. I think AI fear is a bit like that. In 1995, news reports said the internet would probably destroy jobs. Those worries weren't all the same, and they weren't all wrong.</p>
+  <p>But I think AI could be an even bigger shift than the internet. The internet connected people across the world. It put knowledge, services, and entire markets within reach, and that unlocked things we couldn't have imagined before. Now we're adding intelligence that can work across those connections: understand a problem, find the right information, use tools, and take action. We built a connected world. Now we're building systems that can get things done in it. That's why I think this moment is so significant.</p>
   <p class="srcs">Electricity: G. Lawrence's letter to the editor, “The Unemployment Question,” Otago Daily Times, May 28, 1930, page 6. The original scan verifies the excerpt. The sentence concerns the Arapuni dam and electric power works supplying Auckland and surrounding areas. This is a contemporary reader's forecast about electrification and employment, not a measured job-loss outcome. The slide uses the newspaper publication date, not the letter's May 24 dateline.</p>
   <p class="srcs">Atomic bomb: front-page headline, Los Angeles Times, August 7, 1945: “Man's Most Destructive Force, One Equal to 2000 B-29 Loads, Blasts Nips” (the crop shows only the first two lines; the last line uses a wartime slur and is left off). The scan is public domain on Wikimedia Commons. The idea that deterrence helped prevent a great-power war is historian John Lewis Gaddis's “Long Peace” argument. It's an argument, not settled fact.</p>
   <p class="srcs">Internet: the excerpt is from Reuter News Service reporting published by Deseret News on September 14, 1995. It summarizes a debate at an International Institute of Communications conference in Osaka. It is article narrative about the delegates' fears, not a direct quotation from one named expert or a research finding. Preserve “probably.” The image is the authentic publisher archive headline, with contrast increased for legibility; the short verified article excerpt is typeset below. These archive headers are screenshots of publisher websites, not scans of the original print editions.</p>
@@ -477,11 +498,11 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  </div>
  <aside class="notes">
   <h3>Slide 8 · From “How do I do it?” to “Do it for me” · ~2 min</h3>
-  <p>So why does this wave feel different? AI can help with a lot of thinking work, and it can use tools to actually do things. And it's getting better quickly. That means there are more problems you can build solutions for.</p>
-  <p>Look at just six months. In April, Meta showed AI helping plan a family trip. It compared destinations, drafted an itinerary and found activities. By September, Meta introduced Muse, an agent that could book the travel and keep working after you closed the app. That's a different kind of help. You're not asking how anymore. You're handing it off.</p>
-  <p>Today, Google's Gemini docs describe calling businesses to book reservations, getting through phone menus and waiting on hold. Claude's October rollout runs Cowork tasks and recurring work in the cloud on Pro and Max. Now imagine what you could build: a booking assistant, a reservation desk, or a daily research scout for your lab.</p>
-  <p>AI also helps with the building itself. It can write a first prototype, help you explore an idea, and get you to something testable faster. Meta's April examples even included building websites from a prompt. So two things are moving at once: what your solution can do, and how fast you can start building it.</p>
-  <p>These problems weren't impossible before. But something that used to be too slow, too expensive or too hard for one student might be worth trying now. Find a problem you care about, and ask whether these new tools make a good solution possible. Of course, agents don't always work. So on the next slide, let's talk about both the promise and the gap.</p>
+  <p>So what does getting things done in that connected world actually look like? Think about the shift in what we're asking AI. From "How do I do it?" to "Do it for me."</p>
+  <p>Take planning a trip. You ask for an itinerary, and AI gives you places to visit, hotels to consider, maybe a day-by-day plan. Helpful, but you're still the one opening tabs, comparing options and making the bookings. Now imagine handing over the task: here's my budget, here are my dates, find the options and bring me the bookings to approve. The answer is no longer the end of the interaction. It's the start of the work.</p>
+  <p>And we're seeing pieces of this already: agents that can call a business, wait on hold, or work on a task in the background while you do something else. They don't get everything right yet. But look at how much that changes what you could build.</p>
+  <p>When I was a student, I did a bunch of side projects, and we had to hand-code pretty much everything. You could have a great idea and still spend most of your time just getting the pieces to work. Today, you have tools that can help you turn far more of what you imagine into something you can actually try. So I'd encourage you to get better at noticing problems. Watch where people lose time, repeat the same steps, or give up because something is too much effort.</p>
+  <p>A problem that wasn't practical to solve before might be worth tackling now. Look for ways to save people time and make everyday tasks easier. That's the goal: a better experience for the person using what you build. I'm excited about that opportunity, but building agents every day also shows me how much work is still left to do.</p>
   <p class="srcs">Evidence and limits: these are selected product changes, not universal invention dates or a benchmark comparison. April's Meta AI already used multiple agents. Muse is an agent product; Muse Spark is a model. Gemini calling is a gradual rollout for eligible US adults using Pixel 11, a Google AI subscription, English, and the Phone app public beta; task details are reviewed and users can monitor or take over. October 6 expanded cloud Cowork for Pro and Max; cloud beta began July 7. Old local tasks remain local; local resources can need the desktop app. An ongoing goal can resume on schedules or events without continuous model inference. The three builder ideas are conceptual opportunities, not promises of consumer-product APIs or successful autonomous outcomes.</p>
   <p class="srcs">Primary sources: <a href="https://about.fb.com/news/2026/04/introducing-muse-spark-meta-superintelligence-labs/" target="_blank">Meta AI / Muse Spark, original April 8, 2026 section (trip-planning example)</a> · <a href="https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/" target="_blank">Meta Muse, September 8, 2026 (booking travel, background work, approval)</a> · <a href="https://support.google.com/gemini/answer/18336420?hl=en" target="_blank">Gemini: Ask Gemini to handle everyday phone calls</a> · <a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile" target="_blank">Cowork cloud rollout, October 6, 2026</a> · <a href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork" target="_blank">Cowork recurring tasks</a> · <a href="https://support.claude.com/en/articles/12138966-release-notes" target="_blank">Claude release notes: initial July 7 cloud beta</a>. All checked October 13, 2026. “By October 13” is the date the calling capability was verified, not an asserted Gemini launch date. Use Gemini for the calling example: the Meta newsroom material reviewed does not establish autonomous Muse calling. Company documentation establishes described features and availability, not guaranteed successful outcomes.</p>
  </aside>
@@ -491,29 +512,25 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
 <section class="slide">
  <div class="glow" style="width:900px;height:900px;left:-480px;bottom:-520px"></div>
  <div class="content">
-  <div class="kicker">My own swing</div>
+  <div class="kicker">What changed my mind</div>
   <h1>Two feelings, <span class="hl">both true</span></h1>
   <div style="position:absolute;left:0;right:0;top:200px;display:grid;grid-template-columns:1fr 90px 1fr;align-items:center">
-   <div class="card" style="height:250px"><div class="kicker" style="font-size:19px">Using Opus 4.6</div><p class="u" style="font-size:42px;font-weight:600;margin-top:20px">“Software development is over?”</p></div>
+   <div class="card" style="height:250px"><div class="kicker" style="font-size:19px">At Apple · Using Opus 4.6</div><p class="u" style="font-size:42px;font-weight:600;margin-top:20px">“Software development is over?”</p></div>
    <svg viewBox="0 0 90 40" width="90" height="40"><path d="M14 20h62M26 8 12 20l14 12M64 8l14 12-14 12" fill="none" stroke="#7CDEC7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-   <div class="card mint" style="height:250px"><div class="kicker" style="font-size:19px;color:#1B1C30">Building agents daily</div><p class="u" style="font-size:42px;font-weight:600;margin-top:20px">They're still far from replacing humans.</p></div>
+   <div class="card mint" style="height:250px"><div class="kicker" style="font-size:19px;color:#1B1C30">At Google · Harder problems</div><p class="u" style="font-size:42px;font-weight:600;margin-top:20px">Harder problems.<br>A lot left to solve.</p></div>
   </div>
-  <div style="position:absolute;left:0;right:0;top:500px;display:flex;align-items:center;gap:40px">
-   <div class="u hl" style="font-size:120px;line-height:1">~21%</div>
-   <p class="lead" style="font-size:27px;max-width:470px">of real freelance projects completed by the best agent <span style="color:var(--dim)">(2.5% at launch)</span></p>
-   <span class="pill u" style="font-size:34px;margin-left:auto;padding:10px 30px">But we're getting closer.</span>
+  <div style="position:absolute;left:0;right:0;top:530px">
+   <p class="u hl" style="font-size:48px;font-weight:500">As building gets easier, we take on harder problems.</p>
+   <p class="lead" style="font-size:28px;margin-top:22px">The work expands with what becomes possible.</p>
   </div>
  </div>
- <p class="src">Source: Scale AI &amp; CAIS, Remote Labor Index leaderboard, checked Oct 15, 2026 (labs.scale.com/leaderboard/rli)</p>
  <aside class="notes">
-  <h3>Slide 9 · My own swing · ~2 min</h3>
-  <p class="srcs">RLI re-checked Oct 15, 2026: top automation rate still 21.25% (Opus 5.5 on labs.scale.com/leaderboard/rli).</p>
-  <p>Honestly, I go back and forth on this.</p>
-  <p>When I use a frontier model like Opus 4.6 for coding, there are moments where I think: is software development over? It writes things in minutes that would take me hours.</p>
-  <p>Then I go back to my day job, building agents, and I see the other side. They're still far from replacing people. They get stuck. They make subtle mistakes. And sometimes they confidently do the wrong thing.</p>
-  <p>There's data that captures both feelings. Scale AI and the Center for AI Safety built the Remote Labor Index. It's 240 real, paid freelance projects from Upwork, each averaging almost 29 hours of human work. At launch, the best agent finished 2.5% of them at a quality a client would accept. Today the top of the leaderboard is about 21%. So the best agent still fails about four out of five real jobs. But it went from 2.5 to 21. We're getting closer.</p>
-  <p>Andrej Karpathy put it well in January: if you have code you actually care about, watch the models "like a hawk." Both things are true at once. Holding both in your head is the right mindset.</p>
-  <p class="srcs">Sources: <a href="https://labs.scale.com/leaderboard/rli" target="_blank">Remote Labor Index leaderboard</a> · <a href="https://scale.com/blog/rli" target="_blank">Scale AI RLI blog</a> · <a href="https://arxiv.org/abs/2510.26787" target="_blank">RLI paper</a> · <a href="https://x.com/karpathy/status/2015883857489522876" target="_blank">@karpathy, Jan 26, 2026</a></p>
+  <h3>Slide 9 · What changed my mind · ~2 min</h3>
+  <p>Let me tell you why I've felt both sides of this. At Apple, I was working on agentic systems for finance. When I started using Opus 4.6, it handled so much of the implementation that I barely had to stop and think or research things. For the problems I was working on then, it felt like most of the coding was becoming automatic. I remember thinking: is software development over?</p>
+  <p>Then I moved to Google and started working on much harder problems. Even with the latest models, I was back to spending a lot of time thinking, researching, trying different approaches, and figuring out why something wasn't working. That's when I realized how far agents still have to go. The models hadn't become less capable. The problems I was asking them to help solve had become harder.</p>
+  <p>And I think that's what we'll keep seeing. As AI makes today's work easier, we'll take on problems that used to be out of reach. Things we wouldn't have attempted with the time, people, or tools we had before. Our idea of what's worth trying will keep growing.</p>
+  <p>So I don't look at my experience at Apple and conclude that software development is over. I look at what I'm working on now and see how much more there is to build. More of the coding will be automated, but that lets us tackle harder problems. That's where I think our work is going.</p>
+  <p class="srcs">Source: Vinay's firsthand experience at Apple and Google. The outlook on harder problems is his personal perspective.</p>
  </aside>
 </section>
 
@@ -534,7 +551,7 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  <aside class="notes">
   <h3>Slide 10 · What's coming · ~2 min</h3>
   <p>So what's coming? Here are three things I'm fairly confident about.</p>
-  <p>First, smaller teams. When everyone has agents doing part of the work, you need fewer people to ship something real. Paul Graham wrote about a startup with six employees that told him they'd need about ten more people without AI.</p>
+  <p>First, smaller teams. When everyone has agents doing part of the work, you need fewer people to ship something real. Paul Graham shared an example of a six-person startup using AI. The team estimated that without AI, they'd need around sixteen people to do the same work.</p>
   <p>Second, more startups. My favorite example is Base44. A solo founder, Maor Shlomo, built a vibe-coding platform. About six months after he started it, Wix bought it for roughly $80 million up front, plus earn-outs. The company had about six employees and no outside funding. That used to take a big team and venture money.</p>
   <p>Third, and this is the one I care about most: we get to solve bigger, harder problems. When building gets cheaper, problems that were never worth a team's time suddenly are. Things get cheaper and faster, and the world runs a bit better.</p>
   <p>For you, that means life after graduation isn't just "apply to a big company." You can join a tiny team, start one, or go after a problem nobody's bothered to fix. Start with a problem that makes you curious.</p>
@@ -562,12 +579,11 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
  </div>
  <aside class="notes">
   <h3>Slide 11 · Fundamentals + AI · ~2.5 min</h3>
-  <p>So how do you get ready? I'd focus on four habits that build on each other.</p>
-  <p>First, get really good at the fundamentals. Data structures, systems, math, networks, databases. Learn why things work, not just the syntax. That's what lets you pick the right approach, and notice when an AI answer sounds right but isn't. Simon Willison makes this point about coding with AI: your expertise is what lets you steer the tool, and you still have to test what it gives you.</p>
-  <p>Second, learn actively with AI. Ask it to explain something new, quiz you, and poke holes in your reasoning. Then try the problem yourself and explain it back. Finishing a task isn't the same as learning it. One small study of developers learning a new library found that how they used AI mattered. The people who learned more asked conceptual questions and worked to understand the code. It's a good habit, not a magic trick.</p>
-  <p>Third, be precise when you prompt. Learn the language of your field so you can describe the problem clearly. For example, if you know what idempotency means, you can ask for retries that won't charge someone twice. The word matters less than understanding the requirement behind it. Tell the AI the goal, the context, the constraints, and what good looks like. If you don't know the term yet, ask the AI to help you find it, then check the docs. It's a communication skill, and you get better with practice.</p>
-  <p>Fourth, pick projects that get better as AI gets better. I heard a great version of this from an Anthropic researcher talking to PhD students: "Choose projects that get better when compute scales. The rest will be solved before you finish them." So if your project only works around today's model limits, the next model might make it pointless. If it gets better every time the models improve, you're riding the wave instead of racing it. He also said to use AI every day, and I'd say the same. That's how you stay on the curve.</p>
-  <p class="srcs">Research basis: <a href="https://simonwillison.net/2025/Mar/11/using-llms-for-code/" target="_blank">Simon Willison, “Here's how I use LLMs to help me write code,” March 11, 2025</a> (practitioner account: context, specification, testing, expertise, and building small tools) · <a href="https://www.anthropic.com/research/AI-assistance-coding-skills" target="_blank">Shen and Tamkin / Anthropic, January 29, 2026: AI assistance and coding skill formation</a> (52 developers learning Trio; immediate comprehension test; interaction patterns are observational within the experiment, not proven causal learning strategies) · <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank">Claude prompting best practices</a> (clear instructions, context, examples, output constraints) · <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank">Anthropic, September 29, 2025: effective context engineering</a> (relevant context and iterative refinement). Sources reviewed October 14, 2026. The four habits and idempotency example are our synthesis, not quotations or a validated four-step framework. Technical vocabulary helps when it names a genuine requirement; jargon alone does not guarantee better results. Removed the unsupported “weeks instead of semesters” claim.</p>
+  <p>So how do you prepare for this? I still think strong fundamentals are really important. You need to understand how things work to ask good questions, choose an approach, and recognize when the AI gets something wrong.</p>
+  <p>But you have a much better way to learn now. Use AI as a tutor. Ask it to explain a concept, walk through an example, and give you a problem to solve yourself. If it doesn't make sense, keep asking. I think, for some topics, that kind of focused practice could turn months of learning into weeks. The point is to build your understanding, so make sure you can explain it and use it without the AI doing everything for you.</p>
+  <p>Also, learn to describe what you need clearly. Knowing the right vocabulary helps you ask for the right thing. Tell the AI what you're trying to achieve, what context it needs, and what constraints matter. If you don't know how to describe something, ask it to help you find the terms, then check that you understand them.</p>
+  <p>And use these skills to build. Pick projects that become more useful as the models get better. Think about what you'd want your project to do if AI were twice as capable. Start working toward that. Use the tools regularly, try things, and keep learning as they improve.</p>
+  <p class="srcs">Research basis: <a href="https://simonwillison.net/2025/Mar/11/using-llms-for-code/" target="_blank">Simon Willison, “Here's how I use LLMs to help me write code,” March 11, 2025</a> (practitioner account: context, specification, testing, expertise, and building small tools) · <a href="https://www.anthropic.com/research/AI-assistance-coding-skills" target="_blank">Shen and Tamkin / Anthropic, January 29, 2026: AI assistance and coding skill formation</a> (52 developers learning Trio; immediate comprehension test; interaction patterns are observational within the experiment, not proven causal learning strategies) · <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank">Claude prompting best practices</a> (clear instructions, context, examples, output constraints) · <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank">Anthropic, September 29, 2025: effective context engineering</a> (relevant context and iterative refinement). Sources reviewed October 14, 2026. The four habits and idempotency example are our synthesis, not quotations or a validated four-step framework. Technical vocabulary helps when it names a genuine requirement; jargon alone does not guarantee better results. The months-to-weeks phrasing is Vinay's qualified personal expectation for some topics, not a measured result from these sources.</p>
   <p class="srcs">Source: Anthropic researcher's talk to PhD students, as quoted in <a href="https://x.com/rdominguezibar/status/2111873903970881738" target="_blank">this X post</a> (full text via api.fxtwitter.com, Oct 19, 2026): "2. Choose projects that get better when compute scales. The rest will be solved before you finish them." and "1. Use AI every day." The post says the talk is titled "The End of the Anthropocene." Likely Jascha Sohl-Dickstein's MIT CBMM talk "Advice for a (young) investigator in the first and last days of the Anthropocene" (Aug 15, 2025), but the speaker is NOT verified, so the slide says "Anthropic researcher" only.</p>
  </aside>
 </section>
@@ -594,18 +610,18 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
     <div class="u" style="font-size:19px;letter-spacing:.08em;color:var(--dim);margin-bottom:16px">02 · PERSONAL PROJECT</div>
     <p style="font-size:27px;line-height:1.4;color:var(--grey)">Developed an AI agent using LangGraph and an LLM.</p>
    </div>
-   <p style="font-size:28px;line-height:1.4;padding-top:38px">Built an agent for my parents that <span class="hl">compares repair quotes and drafts follow-ups for approval</span>, replacing manual quote tracking.</p>
+   <p style="font-size:28px;line-height:1.4;padding-top:38px">After seeing missed inquiries at a friend's repair shop, built an agent that <span class="hl">tracks requests and drafts follow-ups for owner approval</span>.</p>
   </div>
   <p class="u" style="position:absolute;left:0;top:648px;font-size:29px">Use AI as an editor. <span class="hl">Keep your own voice.</span></p>
   <p style="position:absolute;left:0;top:699px;font-size:17px;color:var(--dim)">Illustrative examples; replace with your own verified work.</p>
  </div>
  <aside class="notes">
   <h3>Slide 12 · Show what you changed · ~2 min</h3>
-  <p>Let's make this concrete with a résumé. "Built an AI assistant with tool calling and memory" lists features. It doesn't tell me what you solved, or how anyone checked your work. AI makes it easy to spin up a demo. What stands out is a real change you can explain and point to.</p>
-  <p>One thing I'd really encourage is contributing to open source. Pick an agent project you actually use, like OpenClaw or Hermes Agent from Nous Research. Find a real issue, understand the code, make a focused change, test it, and respond to review. Getting that accepted is outside validation: you met someone else's bar. OpenClaw openly welcomes AI-assisted contributions, with the same review bar. But you still need to understand your change.</p>
-  <p>So the stronger bullet here imagines fixing duplicate agent replies in OpenClaw, adding a regression test, and getting it merged. It's an illustration, not a real pull request. On your résumé, name the actual issue, link the contribution, and be ready to walk through the bug and the fix.</p>
-  <p>The second example is an agent for your parents. It compares repair quotes, points out what matters, and drafts follow-up questions for them to approve. Now the project has a reason to exist and real users. Explain where a person stays in the loop, and only claim time savings you measured.</p>
-  <p>And please don't hand your résumé fully to AI. Use it for feedback, then rewrite it the way you'd actually say it. I'd rather read an honest, slightly awkward sentence you can explain than a polished one that says nothing about you. Harvard's career office puts it directly: "Generative AI should not be the primary author." Michigan says, "Edit the bullets so that they are accurate and written in your own voice." Read every line out loud and ask: could I explain exactly how I did this?</p>
+  <p>Now, how do you show that work on your résumé? Saying "I built an AI assistant" doesn't tell me much anymore. What problem did you solve? What did you personally contribute? And did anyone actually use it?</p>
+  <p>One thing I'd really encourage you to do is contribute to open source. Pick a project you use, like OpenClaw or Hermes Agent. Find an issue, understand it, and try to fix it. Building a demo or cloning a project is easy now. Getting your contribution accepted into an established project means working with other people's code, writing tests, and responding to feedback. Someone else has reviewed and accepted your work. That's something you can point to.</p>
+  <p>That's what the first example on this slide is trying to show. Instead of listing tools, it describes a specific fix, a test, and an accepted contribution. It's an example, so use your own actual work. You should be able to explain what was broken, what you changed, and why.</p>
+  <p>The second example is about solving a real-world problem you've seen firsthand. Imagine helping at a friend's repair shop and noticing customer inquiries getting lost between calls and messages. You build an agent that tracks those requests and prepares follow-ups for the owner to approve. Now there's a story behind the project: you noticed a problem, understood who it affected, and built something to help. That's the personal touch I mean. Tell me why you cared, what you built, and what changed for the people using it.</p>
+  <p>And one thing I'd ask you: don't let AI write your whole résumé. Use it to help you, then put it in your own words. I'd rather read a slightly awkward sentence about something you really did than a perfect sentence you can't explain. Still proofread it, but make sure it sounds like you. You should be comfortable talking through every line.</p>
   <p class="srcs">Research reviewed October 14, 2026: <a href="https://careerservices.fas.harvard.edu/ai-resumes-and-cover-letters/" target="_blank">Harvard Mignone Center: AI for Resumes and Cover Letters</a> (primary-author quote, authentic representation, AI as suggested edits; full publisher text available in search index, direct page returned HTTP 429 during review) · <a href="https://careercenter.umich.edu/article/resume-resources" target="_blank">University of Michigan Career Center: Resume Resources</a> (exact own-voice quote; action + what + how/why/impact) · <a href="https://capd.mit.edu/blog/2023/09/01/enhance-your-resume-a-guide-for-first-year-undergraduates/" target="_blank">MIT CAPD: first-year résumé guide</a> (project/activity/results, audience relevance, real outcomes) · <a href="https://mitcommlab.mit.edu/aeroastro/commkit/resumes-and-cvs/" target="_blank">MIT AeroAstro Communication Lab: Résumés and CVs</a> (individual contribution, impact, proofreading) · <a href="https://docs.github.com/en/account-and-profile/tutorials/using-your-github-profile-to-enhance-your-resume" target="_blank">GitHub: enhance your résumé with your profile</a> (projects, open-source collaboration, documentation and tests) · <a href="https://www.roberthalf.com/us/en/insights/management-tips/ai-in-the-hiring-process-and-recruiting-strategies-for-tech-talent" target="_blank">George Denlinger / Robert Half: evaluating tech candidates in the AI era</a> (depth, ownership, impact).</p>
   <p class="srcs">Agent-project sources, reviewed October 14, 2026: <a href="https://github.com/openclaw/openclaw/blob/main/CONTRIBUTING.md" target="_blank">OpenClaw contribution guide</a> (focused fixes, validation, maintainer feedback, AI-assisted PR quality standards) · <a href="https://github.com/NousResearch/hermes-agent" target="_blank">Nous Research: Hermes Agent</a> · <a href="https://github.com/NousResearch/hermes-agent/blob/main/CONTRIBUTING.md" target="_blank">Hermes Agent contribution guide</a>. Hermes Agent is the agent project intended here; OpenHermes refers to model releases. The outside-validation point is the speaker's interpretation of a documented contribution/review process, not a measured hiring advantage or a claim that all merged changes receive equally deep human review.</p>
   <p class="srcs">Editorial distinction: all four bullets are hypothetical teaching examples authored for this slide. The OpenClaw example is not an attribution to an actual merged PR and does not establish that the current project has this defect. Maintainer acceptance provides evidence of an accepted contribution, not a guarantee of broad user impact or employment. The stronger versions add factual detail that must actually be true; wording alone cannot turn a generic claim into evidence. No claimed time savings, user totals, or business metrics were invented. OpenClaw and Hermes Agent are verified project examples; no contribution to either project was made as part of this slide edit. The speaker's tolerance for minor errors is a personal preference, not research that errors improve hiring outcomes. This comparison makes no promise about bypassing applicant tracking systems, detecting AI authorship, or securing an interview. A skills section can still be useful; this slide addresses experience and project bullets.</p>
@@ -635,15 +651,13 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
   </div>
  </div>
  <aside class="notes">
-  <h3>Slide 13 · Build your public profile · ~3 min</h3>
-  <p>Your résumé isn't your whole story. It's a snapshot of what you say you've done, and a bullet is easy to make up. I trust a history a lot more: your posts, your projects, the feedback you got, the people you worked with. All of that gives someone more ways to see what you actually did. So start building that history now.</p>
-  <p>With AI, making polished content is easy. What makes yours worth reading is the firsthand part: your decisions, your experiments, your mistakes, and what changed when you tried again. Post about something you actually learned or built. Don't just repost an announcement. Tell people what happened when you used the tool. What worked? What broke? What would you do differently?</p>
-  <p>Then go deeper with articles and blog posts. Write the explanation you wish you'd had when you started. Show the example, the result, the limits, and link to the work. You don't have to be an expert first. It's fine to say, "Here's what I tried, and here's what I still don't get." AI can help you edit, but the observations and judgment should be yours.</p>
-  <p>Build demos. Go to hackathons. Share a short walkthrough of what your team built, and be clear about your part. Then write the follow-up: what did you improve after someone used it? A working demo, an accepted pull request and an honest write-up of the tradeoffs tell a much better story together than any one of them alone.</p>
-  <p>This happened to me. A while back, I joined Zero to Agent, a Vercel x DeepMind hackathon in San Francisco, and our project Duckie made it to the finals. There was a recruiter there, and they reached out afterward. That connection became part of my path to Google. And it happened because I had something to show. People could see the work, not just read about it on a résumé.</p>
+  <h3>Slide 13 · Build your public profile · ~2 min</h3>
+  <p>And don't stop at the résumé. It's easy to make a claim on a page. It's much harder to fake a history of building things, sharing what you learned, and working with other people. Start building that history now.</p>
+  <p>Write about what you're learning. Share a project, an experiment, or something you couldn't get to work. If you figured something out that took you a few days, write the explanation you wish you'd found at the start. You don't have to wait until you're an expert to have something useful to share. Just make it your own experience, in your own words.</p>
+  <p>Go to hackathons, show people what you're building, and talk to other builders. Those conversations are much easier when you have something to show or a problem you're curious about. And afterward, share what you built and what you learned. Give people a way to find you and follow your work.</p>
+  <p>I've seen this happen in my own career. I took part in Zero to Agent, a Vercel and DeepMind hackathon in San Francisco. Our project, Duckie, made it to the finals. A recruiter was there and reached out afterward, and that connection became part of my path to Google. They had a chance to see what we'd built and talk to me about it. That opened a door that a résumé alone might not have.</p>
+  <p>So when I say build your profile, I mean give people a chance to see how you think and what you care about. A few thoughtful posts, a useful article, a demo you can explain. Keep doing that as you learn. Over time, you'll have a history of work that speaks for you.</p>
   <p class="srcs">Verified Oct 15, 2026: Zero to Agent (Vercel x DeepMind) SF, Mar 21, 2026; project Duckie (team Vinay Kudari, Aksh Gaur, Claire Luo) listed among finalists in contemporary coverage. Gallery: cerebralvalley.ai/e/zero-to-agent-sf/hackathon/gallery/54. Recruiter outreach remains Vinay's firsthand account; no recruiter identity or hiring guarantee added.</p>
-  <p>And meet people around the work. Talk to other builders. Ask a good question, share your write-up, help with their project, and follow up. Networking feels a lot more natural when you have something real to talk about. Over time, people see how you think, how you build, and how you take feedback.</p>
-  <p>That's what I mean by a public profile. Your résumé can point to it, but it can't replace it. This isn't about posting every day or chasing followers. Make something useful, share what you learned, and keep going. Let your body of work grow with your skills.</p>
   <p class="srcs">Primary sources reviewed October 14, 2026: <a href="https://swyx.io/learn-in-public" target="_blank">Shawn Wang / swyx, Learn In Public, June 19, 2018</a> (original writing, talks, demonstrations, documentation, relationships; useful work over popularity) · <a href="https://docs.github.com/en/account-and-profile/tutorials/using-your-github-profile-to-enhance-your-resume" target="_blank">GitHub: Using your GitHub profile to enhance your résumé</a> (showcase projects and contributions, make the work understandable) · <a href="https://simonwillison.net/2025/Mar/11/using-llms-for-code/" target="_blank">Simon Willison: Here's how I use LLMs to help me write code, March 11, 2025</a> (public tools, development history, linked transcripts as a practitioner example). Hackathon event/project verified Oct 15, 2026 as Zero to Agent (Vercel x DeepMind) SF, Mar 21, 2026, project Duckie (finalist). Recruiter outreach and path-to-Google connection remain Vinay's firsthand account; no recruiter identity, prize claim, or hiring guarantee is inferred. The slide's wording, activity suggestions, and argument about accumulating a checkable history are the speaker's synthesis, not quotations or measured hiring outcomes.</p>
   <p class="srcs">Framing: a public history is not impossible to fabricate, and a résumé can contain verifiable links. The point is that connected artifacts, public review, repeated follow-through, and collaborators offer more evidence to examine. Content volume, follower counts, hackathon attendance, and polished demos alone do not prove competence. Do not share confidential project material. No claim is made that public posting is mandatory for employment or that credentials no longer matter.</p>
  </aside>
@@ -727,18 +741,31 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
   counter.textContent=pad(i+1)+' / '+pad(slides.length);
   prog.style.width=((i+1)/slides.length*100)+'%';
   var nt=slides[i].querySelector('.notes');panel.innerHTML=nt?nt.innerHTML:'';
+  var sources=panel.querySelectorAll('.srcs');
+  if(sources.length){var details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Sources & notes';details.appendChild(summary);sources.forEach(function(p){details.appendChild(p)});panel.appendChild(details)}
+  panel.scrollTop=0;
+  $('mobileCount').textContent=(i+1)+' / '+slides.length;$('prevBtn').disabled=i===0;$('nextBtn').disabled=i===slides.length-1;
   pv();if(!remote&&(old!==i||!ls))send({i:i});ls=1;
   if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+'#'+(i+1));
  }
  function fit(){
-  var pw=pres?$('pv').offsetWidth:aud?0:panel.classList.contains('open')?panel.offsetWidth:0,aw=window.innerWidth-pw,ah=window.innerHeight;
-  var s=Math.min(aw/1600,ah/900);
-  stage.style.left=(aw/2)+'px';
-  stage.style.transform='translate(-50%,-50%) scale('+s+')';
+  var compact=window.innerWidth<=900&&!pres&&!aud&&!B.classList.contains('render'),open=panel.classList.contains('open');
+  if(compact){
+   var height=window.innerHeight,slideHeight=Math.min(window.innerWidth*900/1600,Math.max(0,open?(height-80)*.42:height-80)),scale=slideHeight/900;
+   stage.style.left='50%';stage.style.top=(64+slideHeight/2)+'px';
+   stage.style.transform='translate(-50%,-50%) scale('+scale+')';
+   panel.style.top=(64+slideHeight+16)+'px';
+   return;
+  }
+  panel.style.top='';stage.style.top='50%';
+  var pw=pres?$('pv').offsetWidth:aud?0:open?panel.offsetWidth:0,aw=window.innerWidth-pw,ah=window.innerHeight;
+  var scale=Math.min(aw/1600,ah/900);
+  stage.style.left=(aw/2)+'px';stage.style.transform='translate(-50%,-50%) scale('+scale+')';
  }
- function toggle(){panel.classList.toggle('open');btn.classList.toggle('on');fit()}
+ function toggle(){var open=panel.classList.toggle('open');btn.classList.toggle('on',open);btn.textContent=open?'Hide script':'Show script';btn.setAttribute('aria-expanded',String(open));panel.setAttribute('aria-hidden',String(!open));panel.inert=!open;fit()}
  document.addEventListener('keydown',function(e){
-  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.metaKey||e.ctrlKey||e.altKey||e.target.closest('button,a,summary,input,textarea,select,[contenteditable]'))return;
+  if(panel.contains(e.target)&&['ArrowDown','ArrowUp',' ','PageDown','PageUp','Home','End'].includes(e.key))return;
   var k=e.key;
   if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();go(i+1)}
   else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){e.preventDefault();go(i-1)}
@@ -749,9 +776,11 @@ body:has(.slide.active[data-public-profile]) #counter{color:#24364A}
   else if(!pres&&(k==='n'||k==='N'))toggle();
  });
  stage.addEventListener('click',function(e){
+  if(e.target.closest('a,button'))return;
   var r=stage.getBoundingClientRect();
   if(e.clientX<r.left+r.width*0.25)go(i-1);else go(i+1);
  });
+ $('prevBtn').onclick=function(){go(i-1)};$('nextBtn').onclick=function(){go(i+1)};
  btn.addEventListener('click',function(e){e.stopPropagation();toggle();btn.blur()});
  $('presentBtn').addEventListener('click',function(e){e.stopPropagation();present();this.blur()});
  $('pvReset').onclick=function(){t0=Date.now();tick();this.blur()};$('pvMinus').onclick=function(){font(-2);this.blur()};$('pvPlus').onclick=function(){font(2);this.blur()};

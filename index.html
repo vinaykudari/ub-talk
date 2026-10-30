@@ -147,8 +147,8 @@ button:disabled{opacity:.3!important;cursor:default}
 </style>
 </head>
 <body>
-<div id="ctl"><nav id="mobileNav" aria-label="Slide navigation"><button id="prevBtn" aria-label="Previous slide">&#8592;</button><span id="mobileCount" aria-live="polite">1 / 16</span><button id="nextBtn" aria-label="Next slide">&#8594;</button></nav><button id="presentBtn" title="Presenter mode: opens the audience window (P)">Present</button><button id="scriptBtn" aria-controls="panel" aria-expanded="false" title="Toggle speaker script (N)">Show script</button></div>
-<div id="pv"><div class="pvtop"><div class="pvinfo"><div id="pvNum">01 / 16</div><div><span id="pvTime">00:00</span> <button id="pvReset">Reset</button></div><div><button id="pvMinus" title="Smaller script (-)">A&minus;</button> <button id="pvPlus" title="Larger script (+)">A+</button></div><div class="pvsize"><label for="pvSlideWidth">Slide width <output id="pvSlideWidthValue">35%</output></label><input id="pvSlideWidth" type="range" min="20" max="50" value="35" aria-label="Slide width"></div></div><div id="pvNext"><div id="pvNextIn"></div></div><div class="pvhint">Share the Audience window in Zoom.</div></div><div id="pvScript" tabindex="0" aria-label="Presenter script"></div></div>
+<div id="ctl"><nav id="mobileNav" aria-label="Slide navigation"><button id="prevBtn" aria-label="Previous slide">&#8592;</button><span id="mobileCount" aria-live="polite">1 / 17</span><button id="nextBtn" aria-label="Next slide">&#8594;</button></nav><button id="presentBtn" title="Presenter mode: opens the audience window (P)">Present</button><button id="scriptBtn" aria-controls="panel" aria-expanded="false" title="Toggle speaker script (N)">Show script</button></div>
+<div id="pv"><div class="pvtop"><div class="pvinfo"><div id="pvNum">01 / 17</div><div><span id="pvTime">00:00</span> <button id="pvReset">Reset</button></div><div><button id="pvMinus" title="Smaller script (-)">A&minus;</button> <button id="pvPlus" title="Larger script (+)">A+</button></div><div class="pvsize"><label for="pvSlideWidth">Slide width <output id="pvSlideWidthValue">35%</output></label><input id="pvSlideWidth" type="range" min="20" max="50" value="35" aria-label="Slide width"></div></div><div id="pvNext"><div id="pvNextIn"></div></div><div class="pvhint">Share the Audience window in Zoom.</div></div><div id="pvScript" tabindex="0" aria-label="Presenter script"></div></div>
 <aside id="panel" aria-label="Speaker script" aria-hidden="true" inert></aside>
 <svg width="0" height="0" style="position:absolute">
  <defs>
@@ -378,9 +378,8 @@ button:disabled{opacity:.3!important;cursor:default}
  <aside class="notes">
   <h3>Slide 5 · Real-use-driven harness improvement · ~2 min</h3>
   <p>When an agent attempts a task, I want to understand its behavior: what actions it took, what happened, and where it went wrong or could have done better. Looking across those attempts helps us identify patterns rather than treating each mistake in isolation.</p>
-  <p>We can use what we learn to improve the harness, then see how it performs on future tasks. Those attempts reveal new things to work on, and the cycle continues. That's the self-improving loop I'm working toward.</p>
-  <p>Post-training means giving an already-trained model more focused training so it gets better at particular tasks. Useful examples could include a task, the tools available, the actions taken, the results those tools returned, and a checked outcome. A good demonstration shows how to do the task; a failed attempt helps us find situations the model needs more practice with.</p>
-  <p>Think back to how you might have trained your first reinforcement learning model. You let an agent explore an environment, try different actions, and receive rewards for making progress or completing the task. Training makes the behavior that earns those rewards more likely. It's the same basic idea here, except the actions involve using tools to work on cloud infrastructure. For example, did it actually restore a service and pass the checks, while respecting the constraints? That's the kind of result we want to reward, rather than just an answer that sounds convincing.</p>
+  <p>We could leverage that to improve the harness, then see how it performs on future tasks. Those attempts reveal new things to work on, and the cycle continues. That's the self-improving loop I'm working toward.</p>
+  <p>Over time, we can also use this data to improve the model itself, so it can handle more on its own and rely less on the harness.</p>
   <p class="srcs">Project goals: Vinay's description. General post-training explanation and illustrative example, not a claim about a specific internal training method or dataset. Reference: <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/tuning/reinforcement-tuning" target="_blank">Google Cloud: Reinforcement learning fine-tuning</a>. Original conceptual illustration.</p>
  </aside>
 </section>
@@ -469,7 +468,7 @@ button:disabled{opacity:.3!important;cursor:default}
  </div>
  <aside class="notes">
   <h3>Slide 7 · Will AI Take Our Jobs? · ~2 min</h3>
-  <p>Whenever a big new technology comes along, it creates headlines and questions about the future. AI is no different. A question many of us have is: will AI take our jobs? Let's look at how people reacted to some of the big changes that came before.</p>
+  <p>A question many of us have is: will AI take our jobs? Whenever a big new technology comes along, it creates headlines and questions about the future. Let's look at how people reacted to some of the big changes that came before.</p>
   <p>In 1930, a newspaper letter warned that electric power would put thousands out of work. In 1945, the Los Angeles Times called the atomic bomb “man's most destructive force.” That's a different concern from jobs. The danger was real, and nuclear weapons are still dangerous. At the same time, having them can help prevent attacks and keep people safe. And in 1995, a news report said the internet would probably destroy jobs. These were very different technologies, and the concerns weren't all the same or all wrong. Each made people think about how a powerful new technology could change the world.</p>
   <p>I think AI could be an even bigger shift than the internet. The internet connected people around the world and opened up access to knowledge, services, and markets. Now we're adding intelligence that can work across those connections: understand a problem, find information, use tools, and take action. We built a connected world. Now we're building systems that can get things done in it.</p>
   <p class="srcs">Electricity: G. Lawrence's letter to the editor, “The Unemployment Question,” Otago Daily Times, May 28, 1930, page 6. The original scan verifies the excerpt. The sentence concerns the Arapuni dam and electric power works supplying Auckland and surrounding areas. This is a contemporary reader's forecast about electrification and employment, not a measured job-loss outcome. The slide uses the newspaper publication date, not the letter's May 24 dateline.</p>
@@ -530,11 +529,11 @@ button:disabled{opacity:.3!important;cursor:default}
  <p class="src" style="font-size:16px">Source: METR, Time Horizon 1.1 · selected model releases through Feb 2026 · dashboard last updated Sept 2026</p>
  <aside class="notes">
   <h3>Slide 8 · METR time horizons · ~2 min</h3>
-  <p>So how quickly is this changing? METR, a research organization that evaluates AI systems, measures what it calls the time horizon. It asks: how long would a task take a human expert when an AI agent is predicted to succeed about half the time?</p>
-  <p>The examples on the left give you a feel for those task lengths, from finding a fact to building a simple web server or training a classifier. These are mostly well-defined software tasks, and the vertical axis uses a logarithmic scale. The examples aren't a guarantee that an agent can do every task at that level.</p>
-  <p>The solid line shows selected estimates through early 2026, rising from a few minutes for GPT-4 to roughly twelve hours for Opus 4.6. The estimates are uncertain, especially near the top. The dashed line asks what might happen if the historical trend continued. It's a thought experiment, not a prediction; METR says its current suite becomes unreliable above sixteen hours.</p>
-  <p>What does that mean if you're choosing a project today? If models can do more six months or a year from now, what will make what you're building valuable? We'll come back to that. First, let me share how working with these systems changed my own thinking.</p>
-  <p class="srcs">Source: <a href="https://metr.org/time-horizons/" target="_blank">METR: Task-Completion Time Horizons of Frontier AI Models</a>; <a href="https://metr.org/assets/benchmark_results_1_1.yaml" target="_blank">METR Time Horizon 1.1 raw results</a>. Example task descriptions and approximate human times are adapted from the examples embedded in METR's public chart (Find fact on web: 0.17 h; Implement a simple webserver: 0.383 h; Train classifier: 0.82 h; Train adversarially robust image model: 4 h; Optimally reduce the size of a language model: 12 h). They illustrate human task length, not guaranteed model performance or complete projects. Selected solid-line points use METR's p50 point estimates and release dates. The dashed extension is an illustrative mathematical scenario anchored at the Feb 2026 Opus 4.6 point, applying the raw data's all-time stitched 187.778-day doubling estimate to Feb 2027; it is not a METR forecast or new data. The starting estimate is highly uncertain and the projected region exceeds METR's 16-hour reliability limit. Logarithmic vertical scale; time is human-expert task duration, not agent runtime. METR's dashboard was last updated September 8, 2026. Its tasks are principally self-contained software engineering, ML, and cybersecurity tasks and do not establish that whole jobs can be automated. Selected model estimates (minutes): GPT-4 (2023-03-14), 3.99; Claude 3.5 Sonnet (2024-06-20), 11.40; o1 (2024-12-05), 38.83; Claude 3.7 Sonnet (2025-02-24), 60.39; o3 (2025-04-16), 119.73; GPT-5 (2025-08-07), 203.01; Claude Opus 4.5 (2025-11-24), 292.99; GPT-5.2 (2025-12-11), 352.25; Claude Opus 4.6 (2026-02-05), 718.81.</p>
+  <p>So how fast is AI improving? METR is a research organization that tests AI agents. It looks at tasks and asks: how long would a human expert take to complete a task that an agent has about a fifty-fifty chance of getting right?</p>
+  <p>Look at how that has grown. On this chart, GPT-4 was at around four minutes in 2023. By early 2026, the estimate for Opus 4.6 was roughly twelve hours. And in just about three months, from late 2025 to early 2026, the estimate went from around five hours to twelve.</p>
+  <p>This way of thinking matters in my own work. Managing cloud infrastructure is a long-horizon task: it can involve a long series of decisions and actions. Building an agent to help with that is an ambitious project, and we took it on with the expectation that models will keep getting better.</p>
+  <p>So when you're choosing a project, don't just think about what AI can do today. Ask what might be possible six months or a year from now. I've also learned firsthand that even as these models improve, there are still much harder problems to solve. Let me tell you what changed my thinking.</p>
+  <p class="srcs">Source: <a href="https://metr.org/time-horizons/" target="_blank">METR: Task-Completion Time Horizons of Frontier AI Models</a>; <a href="https://metr.org/assets/benchmark_results_1_1.yaml" target="_blank">METR Time Horizon 1.1 raw results</a>. Example task descriptions and approximate human times are adapted from the examples embedded in METR's public chart (Find fact on web: 0.17 h; Implement a simple webserver: 0.383 h; Train classifier: 0.82 h; Train adversarially robust image model: 4 h; Optimally reduce the size of a language model: 12 h). They illustrate human task length, not guaranteed model performance or complete projects. Selected solid-line points use METR's p50 point estimates and release dates. The dashed extension is an illustrative mathematical scenario anchored at the Feb 2026 Opus 4.6 point, applying the raw data's all-time stitched 187.778-day doubling estimate to Feb 2027; it is not a METR forecast or new data. The starting estimate is highly uncertain and the projected region exceeds METR's 16-hour reliability limit. Logarithmic vertical scale; time is human-expert task duration, not agent runtime. METR's dashboard was last updated September 8, 2026 and is no longer actively updated. The infrastructure example describes Vinay's project and expectations, not a result measured by METR. Its tasks are principally self-contained software engineering, ML, and cybersecurity tasks and do not establish that whole jobs can be automated. Selected model estimates (minutes): GPT-4 (2023-03-14), 3.99; Claude 3.5 Sonnet (2024-06-20), 11.40; o1 (2024-12-05), 38.83; Claude 3.7 Sonnet (2025-02-24), 60.39; o3 (2025-04-16), 119.73; GPT-5 (2025-08-07), 203.01; Claude Opus 4.5 (2025-11-24), 292.99; GPT-5.2 (2025-12-11), 352.25; Claude Opus 4.6 (2026-02-05), 718.81.</p>
  </aside>
 </section>
 
@@ -589,30 +588,42 @@ button:disabled{opacity:.3!important;cursor:default}
  </aside>
 </section>
 
-<!-- 11 DEVELOP TRUST -->
+<!-- 11 MY ADVICE -->
+<section class="slide">
+ <div class="glow" style="width:1100px;height:1100px;right:-430px;top:-510px;opacity:.52"></div>
+ <div class="content" style="top:0;bottom:0;display:flex;align-items:center">
+  <h1 style="font-size:106px;line-height:1.1;white-space:nowrap">My advice for <span class="hl">what’s next.</span></h1>
+ </div>
+ <aside class="notes">
+  <h3>Slide 11 · My advice for what’s next · ~15 sec</h3>
+  <p>So how do we prepare for what’s next? I want to share four ideas that guide how I’m approaching it.</p>
+ </aside>
+</section>
+
+<!-- 12 DEVELOP TRUST -->
 <section class="slide">
  <div class="glow" style="width:1100px;height:1100px;right:-430px;top:-510px;opacity:.52"></div>
  <div class="content" style="top:0;bottom:0;display:flex;align-items:center">
   <h1 style="font-size:112px;line-height:1.1;white-space:nowrap">Develop <span class="hl">trust in AI.</span></h1>
  </div>
  <aside class="notes">
-  <h3>Slide 11 · Develop trust in AI · ~2 min</h3>
-  <p>I want to share four ideas on how we can prepare for what's coming. The first is to develop trust in AI. I think these systems will keep getting better. I don't think we can simply stop that progress, so I want us to put our energy into understanding the risks and making the technology safer.</p>
+  <h3>Slide 12 · Develop trust in AI · ~2 min</h3>
+  <p>First, develop trust in AI. I think these systems will keep getting better. I don't think we can simply stop that progress, so I want us to put our energy into understanding the risks and making the technology safer.</p>
   <p>There are real reasons for concern: mistakes, privacy, misuse, and what happens to people's work. We should take those seriously. At the same time, when I look at what AI is making possible, I see a lot of reasons to be hopeful.</p>
   <p>It's helping researchers understand genetic changes, helping doctors find signs of cancer, and helping scientists explore new drug candidates. Researchers are also studying how it might help predict patient outcomes. Those are examples where better tools could make a real difference to people's lives. They still need careful testing, and experts have to be involved.</p>
-  <p>And as exciting as that is, I think the transition is going to ask a lot of us.</p>
+  <p>But as these tools improve, the world around us will change too. And we'll need to be ready to adapt.</p>
   <p class="srcs">Illustrative research, not evidence that agents autonomously diagnose patients or that an investigational medicine is approved: <a href="https://deepmind.google/research/publications/21083/" target="_blank">AlphaMissense: genetic variant predictions</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/39904652/" target="_blank">MASAI randomized breast-screening trial</a> · <a href="https://www.nature.com/articles/s41467-026-73088-y" target="_blank">Research on breast-cancer outcome prediction</a> · <a href="https://www.nature.com/articles/s41591-025-03743-2" target="_blank">Phase 2a trial of an AI-designed drug candidate</a>. Optimism and outlook on progress are Vinay's perspective.</p>
  </aside>
 </section>
 
-<!-- 12 PREPARE FOR CHANGE -->
+<!-- 13 PREPARE FOR CHANGE -->
 <section class="slide">
  <div class="glow" style="width:1100px;height:1100px;left:-460px;bottom:-600px;opacity:.52"></div>
  <div class="content" style="top:0;bottom:0;display:flex;align-items:center">
   <h1 style="font-size:112px;line-height:1.1;white-space:nowrap">Prepare for <span class="hl">the chaos.</span></h1>
  </div>
  <aside class="notes">
-  <h3>Slide 12 · Prepare for the chaos · ~1.5 min</h3>
+  <h3>Slide 13 · Prepare for the chaos · ~1.5 min</h3>
   <p>I think the world we're entering could look very different from the one we're used to. New tools will change how we work, what small teams can do, and the kinds of skills people need. I don't know exactly how that transition will unfold.</p>
   <p>There may be a period of real chaos, and some people could go through a lot of struggle. I don't want to pretend that everyone will experience this change in the same way, or that adapting will be easy.</p>
   <p>But periods of upheaval can also push us to learn, adapt, and find new ways forward. So stay curious. Keep your fundamentals strong. Learn to use these tools, and keep looking for hard problems worth solving. The goal isn't to have the whole future figured out; it's to be ready to keep learning as it unfolds.</p>
@@ -621,23 +632,23 @@ button:disabled{opacity:.3!important;cursor:default}
  </aside>
 </section>
 
-<!-- 13 BUILD FOR THE FUTURE -->
+<!-- 14 BUILD FOR THE FUTURE -->
 <section class="slide">
  <div class="glow" style="width:1100px;height:1100px;right:-470px;bottom:-600px;opacity:.52"></div>
  <div class="content" style="top:0;bottom:0;display:flex;align-items:center">
   <h1 style="font-size:112px;line-height:1.1;white-space:nowrap">Build for <span class="hl">the future.</span></h1>
  </div>
  <aside class="notes">
-  <h3>Slide 13 · Build for the future · ~2 min</h3>
-  <p>Remember the question from the METR chart: as models get better, what will make your project valuable? Here's how I think about it. If models get ten times better, is there still a hard and useful problem here?</p>
-  <p>I want better models to make my project more powerful. A simple prototype is a great way to learn, but if the whole project is just getting today's model to do something it struggles with, tomorrow's model might make that part much easier. Think about what you can add around it.</p>
-  <p>That could be a real need you've understood by talking to people, data that needs to be collected, experiments in the world, or a system that has to work reliably. Science, healthcare, logistics, and robotics all have problems like that. And I believe robotics will become much more mainstream as the models behind it improve. There will still be a lot of hard work in sensing, acting, testing, and making things useful in the physical world.</p>
-  <p>Even if we get to AGI, the question doesn't disappear: what do we want to do with it? What problems are worth solving next? Start with something that matters to someone, then build in a way that gets stronger as the tools improve.</p>
+  <h3>Slide 14 · Build for the future · ~2 min</h3>
+  <p>Remember the question from the METR chart: as models get better, what will make your project valuable? I like to ask myself: if models get ten times better, is there still a hard and useful problem to solve?</p>
+  <p>I want better models to make my project more powerful. A simple prototype is a great way to learn. But imagine your entire project is an app that summarizes documents. A better model might soon do that on its own. Instead, think about a real problem you can solve for someone, where a better model would make your solution even better.</p>
+  <p>Maybe it's a problem you've learned about by talking to people, data you need to collect, or something you need to test in the real world. There are problems like that in science, healthcare, logistics, and robotics. I think robotics will become much more common as models improve, but making machines work well in the physical world will still be hard.</p>
+  <p>Even if we get to AGI, we'll still have to ask: what do we want to do with it? What problems should we solve next? Start with something that matters to someone, and build in a way that gets better as the tools improve.</p>
   <p class="srcs">The ten-times-better scenario, robotics outlook, project-selection questions, and view of AGI are Vinay's thought experiment and perspective, not predictions of a specific timeline or model capability. Examples of domains are starting points rather than guarantees that every project in them remains difficult.</p>
  </aside>
 </section>
 
-<!-- 14 PUBLIC TRACK RECORD -->
+<!-- 15 PUBLIC TRACK RECORD -->
 <section class="slide" data-public-profile>
  <div style="position:absolute;inset:0 0 0 620px;background:var(--mint)"></div>
  <svg style="position:absolute;left:0;bottom:0;width:620px;height:520px;opacity:.22" viewBox="0 0 620 520" aria-hidden="true">
@@ -648,18 +659,18 @@ button:disabled{opacity:.3!important;cursor:default}
   <span style="padding-left:28px;color:var(--bg)">public profile.</span>
  </h1>
  <aside class="notes">
-  <h3>Slide 14 · Build your public profile · ~3 min</h3>
+  <h3>Slide 15 · Build your public profile · ~3 min</h3>
   <p>Once you start working on problems you care about, let people see the work. Your résumé is a snapshot. It's easy to make a claim on a page, but a history of projects, writing, and contributions gives people more ways to see what you've actually done. I think that will matter more as hiring changes.</p>
   <p>Contribute to open source. Find a project you use, understand an issue, and make a change you can explain. When a contribution is accepted, you've worked with someone else's code and met their bar. That's something you can show, and the conversation around that work is part of your story too.</p>
   <p>Share your ideas, experiments, and the things you learn. Write a post or a blog about what you tried, what worked, and what didn't. You don't have to be an expert. The value is in your own experience and the way you think through it.</p>
   <p>For me, writing is part of thinking. So I usually don't ask AI to create my first draft. I write it myself, even if it's messy, and then use AI to challenge or improve it. Joining a writing club has helped me practice that. As the tools get better, I don't want to lose the ability to form my own thoughts.</p>
-  <p>The same goes for your résumé: don't let AI write it for you. Use it for feedback, but make sure the words are yours and you can explain every line. I think more screening will look beyond a school name or a project title and toward the fuller picture of what you've made and shared.</p>
+  <p>The same goes for your résumé: don't let AI write it for you. Use it for feedback, but make sure the words are yours and you can explain every line. I think employers will look beyond where you went to school or what you list on your résumé. They'll also look at what you've built, what you've shared, and how you think.</p>
   <p>And go to hackathons. I took part in Zero to Agent, a Vercel and DeepMind hackathon in San Francisco, and our project Duckie made it to the finals. A recruiter was there and reached out afterward. That connection became part of my path to Google. People had a chance to see the work and talk to me about it. That's the kind of opportunity you create when you put your work out there.</p>
   <p class="srcs">Personal writing practice, writing-club experience, recruiter outreach, and path to Google: Vinay's account. Zero to Agent, a Vercel x DeepMind hackathon in San Francisco, and Duckie's finalist status were verified in October 2026. Hiring outlook is Vinay's view, not a guarantee. Public history can also be misrepresented; linked artifacts and contributions provide additional evidence. References: <a href="https://docs.github.com/en/account-and-profile/reference/profile-contributions-reference" target="_blank">GitHub: profile contributions</a> · <a href="https://writing.wisc.edu/handbook/processandstructure/generatingideas/" target="_blank">UW–Madison Writing Center: generating ideas</a> · <a href="https://github.com/openclaw/openclaw/blob/main/CONTRIBUTING.md" target="_blank">OpenClaw contribution guide</a>.</p>
  </aside>
 </section>
 
-<!-- 15 ERIC SCHMIDT -->
+<!-- 16 ERIC SCHMIDT -->
 <section class="slide">
  <div class="glow" style="width:1000px;height:1000px;right:-420px;top:-450px;opacity:.5"></div>
  <div class="content" style="top:135px">
@@ -675,7 +686,7 @@ button:disabled{opacity:.3!important;cursor:default}
   </div>
  </div>
  <aside class="notes">
-  <h3>Slide 15 · People and perspective · ~2 min</h3>
+  <h3>Slide 16 · People and perspective · ~2 min</h3>
   <p>That hackathon experience also reminded me how much the people around you can matter. Living in Silicon Valley has been an important part of my journey. I've met people who are building and thinking about the future, and being around them has changed how I think and what I believe is possible.</p>
   <p>If you get the opportunity to move there, I'd encourage you to consider it. And if that's not possible, you can still learn from people you admire wherever you are. Follow their work, read their blogs, listen to their podcasts, and find people you can learn and build with.</p>
   <p>Following people who think about these questions has also given me a sense of how much change may be ahead. Eric Schmidt, a former Google CEO, has spoken about how profoundly AI could change the world. In 2025, he suggested that superintelligence could arrive within about six years. That's a prediction, and nobody knows the timeline. But it captures why I think this is such an important moment.</p>
@@ -684,7 +695,7 @@ button:disabled{opacity:.3!important;cursor:default}
  </aside>
 </section>
 
-<!-- 16 THANK YOU -->
+<!-- 17 THANK YOU -->
 <section class="slide">
  <div class="glow" style="width:1100px;height:1100px;right:-430px;top:-480px"></div>
  <div class="glow" style="width:1000px;height:1000px;left:-300px;bottom:-760px"></div>
@@ -698,13 +709,13 @@ button:disabled{opacity:.3!important;cursor:default}
   </a>
  </div>
  <aside class="notes">
-  <h3>Slide 16 · Thank you · ~15 sec, then Q&amp;A</h3>
+  <h3>Slide 17 · Thank you · ~15 sec, then Q&amp;A</h3>
   <p>Thank you all for having me. I'm excited to see what you build. I'd be happy to take your questions.</p>
   <p class="srcs">Sources: none.</p>
  </aside>
 </section>
 
-<div id="counter">01 / 16</div>
+<div id="counter">01 / 17</div>
 <div id="progress"></div>
 </div>
 
